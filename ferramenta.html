@@ -49,6 +49,11 @@
       overflow-x: hidden;
     }
 
+    :focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
     .topbar {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -59,12 +64,12 @@
     }
 
     .topbar-inner {
-      max-width: 1440px;
+      max-width: 1380px;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 2rem;
+      gap: 1.5rem;
     }
 
     .brand {
@@ -83,7 +88,7 @@
 
     .nav-link {
       font-size: 0.875rem;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text-secondary);
       text-decoration: none;
       padding: 0.25rem 0;
@@ -91,19 +96,19 @@
       white-space: nowrap;
     }
 
+    .nav-link:hover { color: var(--text); }
     .nav-link.active {
       color: var(--primary);
       border-bottom-color: var(--primary);
-      font-weight: 600;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 0.875rem;
-      border-radius: 0.5rem;
-      font-size: 0.8125rem;
+      gap: 0.4rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
       font-weight: 600;
       cursor: pointer;
       border: 1px solid var(--border);
@@ -111,7 +116,10 @@
       color: var(--text);
       text-decoration: none;
       white-space: nowrap;
+      font-family: inherit;
     }
+
+    .btn:hover { border-color: var(--primary); }
 
     .btn-primary {
       background: var(--primary);
@@ -120,33 +128,60 @@
     }
 
     .workspace {
-      max-width: 1440px;
+      max-width: 1380px;
       width: 100%;
       margin: 0 auto;
-      padding: 1.25rem;
+      padding: 1rem 1.5rem 2.5rem;
       flex: 1;
     }
 
-    .platform-bar {
+    /* Compact Command Bar */
+    .command-bar {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 0.75rem;
-      padding: 1rem;
-      margin-bottom: 1rem;
+      border-radius: 8px;
+      padding: 0.625rem 1rem;
+      margin-bottom: 0.75rem;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
+      gap: 0.75rem;
+    }
+
+    .segmented {
+      display: inline-flex;
+      padding: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      gap: 2px;
+    }
+
+    .seg-btn {
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .seg-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
     }
 
     .feedback-banner {
-      padding: 0.875rem 1rem;
-      border-radius: 0.75rem;
+      padding: 0.625rem 0.875rem;
+      border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--surface);
-      margin-bottom: 1rem;
-      font-size: 0.8125rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.75rem;
       display: none;
       justify-content: space-between;
       align-items: center;
@@ -158,7 +193,7 @@
     .grid-3 {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1.25rem;
+      gap: 1rem;
       align-items: start;
     }
 
@@ -169,52 +204,151 @@
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 0.75rem;
-      padding: 1rem;
+      border-radius: 8px;
+      padding: 0.875rem;
+    }
+
+    .panel-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .cat-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin: 0.5rem 0 0.75rem;
+    }
+
+    .cat-pill {
+      padding: 0.15rem 0.45rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .cat-pill.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
     }
 
     .part-card {
-      padding: 0.75rem;
-      border-radius: 0.5rem;
+      padding: 0.5rem 0.65rem;
+      border-radius: 6px;
       border: 1px solid var(--border);
       background: var(--surface-elevated);
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.4rem;
       cursor: pointer;
       user-select: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .part-card:hover { border-color: var(--primary); }
     .part-card.selected {
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px var(--primary);
+      box-shadow: 0 0 0 1px var(--primary);
+      background: rgba(57, 121, 183, 0.14);
     }
     .part-card.installed {
       opacity: 0.45;
       cursor: default;
     }
 
+    /* Clean Chassis & PCB */
     .chassis {
       background: #0E151F;
-      border: 2px solid #2A3542;
-      border-radius: 0.75rem;
-      padding: 1rem;
+      border: 1px solid #2A3542;
+      border-radius: 8px;
+      padding: 0.875rem;
       color: #F2F5F8;
     }
 
     .pcb {
       background: #131E2B;
-      border: 2px solid #3979B7;
-      border-radius: 0.5rem;
-      padding: 1rem;
-      margin-bottom: 1rem;
+      border: 1px solid rgba(57, 121, 183, 0.65);
+      border-radius: 6px;
+      padding: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .pcb-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid #2A3542;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .screw-group {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .screw-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 4px;
+      border: 1px solid #47586B;
+      background: #0C1118;
+      color: #A2AFBE;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+    }
+
+    .screw-btn.filled {
+      border-color: var(--success);
+      color: var(--success);
+      background: rgba(16, 185, 129, 0.18);
+    }
+
+    .pcb-grid-top {
+      display: grid;
+      grid-template-columns: 7fr 5fr;
+      gap: 0.65rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .pcb-grid-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+
+    @media (max-width: 640px) {
+      .pcb-grid-top, .pcb-grid-two { grid-template-columns: 1fr; }
+    }
+
+    .cpu-cluster {
+      background: rgba(12, 17, 24, 0.8);
+      border: 1px solid #2A3542;
+      border-radius: 6px;
+      padding: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
     }
 
     .slot-box {
-      border: 2px dashed rgba(83, 151, 209, 0.5);
-      background: rgba(12, 17, 24, 0.85);
-      border-radius: 0.5rem;
-      padding: 0.75rem;
-      margin-bottom: 0.65rem;
+      border: 1px dashed rgba(83, 151, 209, 0.55);
+      background: rgba(21, 29, 40, 0.9);
+      border-radius: 6px;
+      padding: 0.55rem 0.65rem;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
@@ -222,9 +356,9 @@
       gap: 0.5rem;
     }
 
-    .slot-box:hover, .slot-box.highlight {
+    .slot-box:hover {
       border-color: #5397D1;
-      background: rgba(57, 121, 183, 0.25);
+      background: rgba(57, 121, 183, 0.2);
     }
 
     .slot-box.filled {
@@ -239,42 +373,12 @@
       background: rgba(239, 68, 68, 0.2);
     }
 
-    .screw-row {
-      display: flex;
-      justify-content: space-between;
-      margin: 0.5rem 0;
-    }
-
-    .screw-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 2px solid #47586B;
-      background: #0C1118;
-      color: #A2AFBE;
-      cursor: pointer;
-      font-family: var(--font-mono);
-    }
-
-    .screw-btn.filled {
-      border-color: var(--success);
-      color: var(--success);
-    }
-
     .status-row {
       display: flex;
       justify-content: space-between;
-      padding: 0.45rem 0;
+      padding: 0.35rem 0;
       border-bottom: 1px solid var(--border);
       font-size: 0.75rem;
-    }
-
-    .footer {
-      text-align: center;
-      padding: 1rem;
-      border-top: 1px solid var(--border);
-      font-size: 0.75rem;
-      color: var(--text-secondary);
     }
   </style>
 </head>
@@ -289,122 +393,148 @@
         <a href="./biblioteca.html" class="nav-link">Catálogo Técnico</a>
         <a href="./ferramenta.html" class="nav-link active">Bancada Virtual</a>
       </nav>
-      <div style="display:flex;gap:0.5rem;align-items:center;">
+      <div>
         <button type="button" class="btn" id="btn-theme" aria-label="Alternar tema claro ou escuro">Tema</button>
       </div>
     </div>
   </header>
 
   <main class="workspace">
-    <div class="platform-bar">
-      <div>
-        <strong style="font-size:0.85rem;">Plataforma da Placa-Mãe:</strong>
-        <span style="font-size:0.8rem;color:var(--text-secondary);margin-left:0.5rem;">Selecione a arquitetura para testar todas as peças do inventário:</span>
+    <!-- Compact Command Bar -->
+    <div class="command-bar">
+      <div style="display:flex;align-items:center;gap:0.65rem;flex-wrap:wrap;">
+        <span style="font-family:var(--font-mono);font-size:0.72rem;text-transform:uppercase;color:var(--text-secondary);">Placa-Mãe:</span>
+        <div class="segmented" role="radiogroup" aria-label="Selecionar plataforma">
+          <button type="button" class="seg-btn active" id="plat-am4">AM4 · DDR4</button>
+          <button type="button" class="seg-btn" id="plat-lga1700">LGA1700 · DDR5</button>
+        </div>
       </div>
-      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-        <button type="button" class="btn btn-primary" id="plat-am4">Placa AM4 · DDR4</button>
-        <button type="button" class="btn" id="plat-lga1700">Placa LGA1700 · DDR5</button>
-        <button type="button" class="btn" id="btn-reset">Reiniciar Bancada</button>
+
+      <div style="display:flex;align-items:center;gap:0.85rem;font-family:var(--font-mono);font-size:0.75rem;">
+        <span>Checklist: <strong id="steps-val">0/8</strong></span>
+        <span style="color:var(--border);">|</span>
+        <span>Pontos: <strong id="score-val">250</strong></span>
+        <span style="color:var(--border);">|</span>
+        <span style="color:var(--primary);font-weight:600;" id="time-val">00:00</span>
+        <button type="button" class="btn" id="btn-reset">Reiniciar</button>
       </div>
     </div>
 
+    <!-- Feedback Banner -->
     <div class="feedback-banner" id="feedback-banner" role="status" aria-live="polite">
       <span id="feedback-text"></span>
-      <button type="button" class="btn" onclick="document.getElementById('feedback-banner').classList.remove('show')">OK</button>
+      <button type="button" class="btn" onclick="document.getElementById('feedback-banner').classList.remove('show')">Fechar</button>
     </div>
 
+    <!-- 3-Column Clean Grid -->
     <div class="grid-3">
+      <!-- Column 1: Streamlined Inventory -->
       <aside class="panel">
-        <h2 style="font-size:0.95rem;margin-bottom:0.25rem;">1. Inventário de Componentes</h2>
-        <p style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:0.75rem;">Clique ou arraste uma peça e selecione o destino na bancada.</p>
-        <div id="inventory-list" style="max-height:560px;overflow-y:auto;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <h2 class="panel-title">1. Peças Disponíveis</h2>
+          <label style="font-size:0.7rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.3rem;cursor:pointer;">
+            <input type="checkbox" id="hide-installed" checked />
+            Ocultar instaladas
+          </label>
+        </div>
+
+        <div class="cat-pills" id="cat-pills">
+          <button type="button" class="cat-pill active" data-cat="all">Todas</button>
+          <button type="button" class="cat-pill" data-cat="cpu">CPU</button>
+          <button type="button" class="cat-pill" data-cat="thermal">Térmica</button>
+          <button type="button" class="cat-pill" data-cat="cooler">Cooler</button>
+          <button type="button" class="cat-pill" data-cat="ram">RAM</button>
+          <button type="button" class="cat-pill" data-cat="storage">SSD</button>
+          <button type="button" class="cat-pill" data-cat="gpu">GPU</button>
+          <button type="button" class="cat-pill" data-cat="psu">Fonte</button>
+          <button type="button" class="cat-pill" data-cat="screw">Parafusos</button>
+        </div>
+
+        <div id="inventory-list" style="max-height:500px;overflow-y:auto;"></div>
       </aside>
 
+      <!-- Column 2: Clean Schematic Chassis -->
       <section class="panel">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
-          <h2 style="font-size:0.95rem;" id="stage-title">Chassi ATX — Placa-Mãe AM4 · DDR4</h2>
-          <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-secondary);" id="screw-counter">Fixação: 0/4</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.65rem;">
+          <h2 class="panel-title" id="stage-title">2. Gabinete ATX — Placa AM4 · DDR4</h2>
+          <span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-secondary);" id="screw-counter">Fixação M3: 0/4</span>
         </div>
 
         <div class="chassis">
           <div class="pcb">
-            <div class="screw-row">
-              <button type="button" class="screw-btn" data-slot="screw-hole-1" title="Espaçador M3 #1">+</button>
-              <span style="font-family:var(--font-mono);font-size:0.7rem;color:#A2AFBE;">PLACA-MÃE (PCB PRINCIPAL)</span>
-              <button type="button" class="screw-btn" data-slot="screw-hole-2" title="Espaçador M3 #2">+</button>
+            <div class="pcb-header">
+              <span style="font-family:var(--font-mono);font-size:0.68rem;color:#A2AFBE;" id="pcb-label">PLACA-MÃE (AM4 · DDR4)</span>
+              <div class="screw-group">
+                <span style="font-family:var(--font-mono);font-size:0.65rem;color:#A2AFBE;">Parafusos M3:</span>
+                <button type="button" class="screw-btn" data-slot="screw-hole-1" title="Espaçador M3 #1">1</button>
+                <button type="button" class="screw-btn" data-slot="screw-hole-2" title="Espaçador M3 #2">2</button>
+                <button type="button" class="screw-btn" data-slot="screw-hole-3" title="Espaçador M3 #3">3</button>
+                <button type="button" class="screw-btn" data-slot="screw-hole-4" title="Espaçador M3 #4">4</button>
+              </div>
             </div>
 
-            <div class="slot-box" data-slot="slot-cpu" id="box-cpu"></div>
-            <div class="slot-box" data-slot="slot-thermal" id="box-thermal"></div>
-            <div class="slot-box" data-slot="slot-cooler" id="box-cooler"></div>
-            <div class="slot-box" data-slot="slot-ram" id="box-ram"></div>
-            <div class="slot-box" data-slot="slot-m2" id="box-m2"></div>
-            <div class="slot-box" data-slot="slot-gpu" id="box-gpu"></div>
+            <div class="pcb-grid-top">
+              <div class="cpu-cluster">
+                <div style="font-family:var(--font-mono);font-size:0.65rem;color:#A2AFBE;">CONJUNTO DO PROCESSADOR</div>
+                <div class="slot-box" data-slot="slot-cpu" id="box-cpu"></div>
+                <div class="slot-box" data-slot="slot-thermal" id="box-thermal"></div>
+                <div class="slot-box" data-slot="slot-cooler" id="box-cooler"></div>
+              </div>
+              <div class="slot-box" data-slot="slot-ram" id="box-ram" style="height:100%;"></div>
+            </div>
 
-            <div class="screw-row">
-              <button type="button" class="screw-btn" data-slot="screw-hole-3" title="Espaçador M3 #3">+</button>
-              <button type="button" class="screw-btn" data-slot="screw-hole-4" title="Espaçador M3 #4">+</button>
+            <div class="pcb-grid-two">
+              <div class="slot-box" data-slot="slot-m2" id="box-m2"></div>
+              <div class="slot-box" data-slot="slot-gpu" id="box-gpu"></div>
             </div>
           </div>
 
-          <div style="border-top:1px solid #2A3542;padding-top:0.75rem;">
-            <div style="font-family:var(--font-mono);font-size:0.7rem;color:#A2AFBE;margin-bottom:0.5rem;">REGIÕES DO GABINETE (FORA DA PLACA-MÃE)</div>
+          <div class="pcb-grid-two">
             <div class="slot-box" data-slot="slot-sata" id="box-sata"></div>
             <div class="slot-box" data-slot="slot-psu" id="box-psu"></div>
           </div>
         </div>
       </section>
 
+      <!-- Column 3: Compact Diagnostics & Power -->
       <aside class="panel">
-        <div style="display:flex;justify-content:space-between;margin-bottom:1rem;padding:0.75rem;background:var(--bg);border:1px solid var(--border);border-radius:0.5rem;">
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-secondary);">PONTUAÇÃO</div>
-            <div style="font-family:var(--font-mono);font-size:1.5rem;font-weight:700;" id="score-val">250</div>
+        <div style="margin-bottom:0.85rem;padding:0.65rem;background:var(--bg);border:1px solid var(--border);border-radius:6px;font-size:0.75rem;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;">
+            <strong>Energia do Sistema</strong>
+            <span style="font-family:var(--font-mono);color:var(--primary);" id="watts-rec">Rec: 0 W</span>
           </div>
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-secondary);">TEMPO</div>
-            <div style="font-family:var(--font-mono);font-size:1.5rem;font-weight:700;color:var(--primary);" id="time-val">00:00</div>
-          </div>
+          <div class="status-row"><span>Consumo Contínuo:</span><strong id="watts-est">0 W</strong></div>
+          <div class="status-row" style="border-bottom:none;"><span>Fonte Instalada:</span><strong id="watts-psu">—</strong></div>
         </div>
 
-        <div style="margin-bottom:1rem;padding:0.75rem;background:var(--bg);border:1px solid var(--border);border-radius:0.5rem;font-size:0.75rem;">
-          <div style="font-weight:700;margin-bottom:0.4rem;">Balanço de Energia</div>
-          <div class="status-row"><span>Consumo Estimado:</span><strong id="watts-est">0 W</strong></div>
-          <div class="status-row"><span>Margem Recomendada (+30%):</span><strong id="watts-rec">0 W</strong></div>
-          <div class="status-row"><span>Fonte Instalada:</span><strong id="watts-psu">Não instalada</strong></div>
-        </div>
+        <h2 class="panel-title" style="margin-bottom:0.4rem;">3. Checklist POST</h2>
+        <div id="diag-list" style="margin-bottom:0.85rem;border-top:1px solid var(--border);"></div>
 
-        <div id="diag-list" style="margin-bottom:1rem;"></div>
-
-        <button type="button" class="btn btn-primary" id="btn-power" style="width:100%;justify-content:center;padding:0.85rem;">Ligar Computador (Testar POST)</button>
+        <button type="button" class="btn btn-primary" id="btn-power" style="width:100%;justify-content:center;padding:0.7rem;">Ligar Computador (POST)</button>
       </aside>
     </div>
   </main>
 
-  <footer class="footer">
-    HardwareDex · Bancada Virtual de Montagem · © 2026 Matheus de Oliveira
-  </footer>
-
   <script>
     const PARTS = [
-      { id: 'cpu-amd', name: 'Ryzen 5', cat: 'cpu', socket: 'AM4', watts: 65, spec: 'Socket AM4 · 65 W' },
-      { id: 'cpu-intel', name: 'Intel i5', cat: 'cpu', socket: 'LGA1700', watts: 125, spec: 'Socket LGA1700 · 125 W' },
-      { id: 'pasta-termica', name: 'Pasta Térmica', cat: 'thermal', watts: 0, spec: 'Composto térmico condutivo' },
-      { id: 'pasta-errada', name: 'Super Bonder', cat: 'thermal', invalid: true, watts: 0, spec: 'Adesivo cianoacrilato (Inadequado)' },
-      { id: 'cooler-amd', name: 'Cooler AMD AM4', cat: 'cooler', socket: 'AM4', watts: 10, spec: 'Suporte AM4 · 10 W' },
-      { id: 'cooler-intel', name: 'Cooler Intel LGA1700', cat: 'cooler', socket: 'LGA1700', watts: 10, spec: 'Suporte LGA1700 · 10 W' },
-      { id: 'ram-ddr4', name: 'DDR4 16 GB', cat: 'ram', ddr: 'DDR4', watts: 5, spec: 'DDR4 · 3200 MHz' },
-      { id: 'ram-ddr5', name: 'DDR5 16 GB', cat: 'ram', ddr: 'DDR5', watts: 5, spec: 'DDR5 · 5200 MHz' },
-      { id: 'ssd-nvme', name: 'SSD NVMe M.2 1 TB', cat: 'storage', iface: 'M2', watts: 5, spec: 'Formato M.2 PCIe' },
-      { id: 'ssd-sata', name: 'SSD SATA 2,5" 480 GB', cat: 'storage', iface: 'SATA', watts: 3, spec: 'Formato 2,5" SATA III' },
-      { id: 'gpu-3060', name: 'RTX 3060', cat: 'gpu', watts: 170, spec: 'PCIe x16 · 170 W' },
-      { id: 'gpu-1660', name: 'GTX 1660 Super', cat: 'gpu', watts: 120, spec: 'PCIe x16 · 120 W' },
-      { id: 'psu-650', name: 'Fonte 650 W', cat: 'psu', maxWatts: 650, watts: 0, spec: '80 Plus Bronze · 650 W' },
-      { id: 'psu-450', name: 'Fonte 450 W', cat: 'psu', maxWatts: 450, watts: 0, spec: '80 Plus White · 450 W' },
-      { id: 'screw-1', name: 'Parafuso M3 #1', cat: 'screw', watts: 0, spec: 'Fixação da placa-mãe' },
-      { id: 'screw-2', name: 'Parafuso M3 #2', cat: 'screw', watts: 0, spec: 'Fixação da placa-mãe' },
-      { id: 'screw-3', name: 'Parafuso M3 #3', cat: 'screw', watts: 0, spec: 'Fixação da placa-mãe' },
-      { id: 'screw-4', name: 'Parafuso M3 #4', cat: 'screw', watts: 0, spec: 'Fixação da placa-mãe' }
+      { id: 'cpu-amd', name: 'Ryzen 5 5600', cat: 'cpu', socket: 'AM4', watts: 65, spec: 'AM4 · 65W' },
+      { id: 'cpu-intel', name: 'Core i5-13400', cat: 'cpu', socket: 'LGA1700', watts: 125, spec: 'LGA1700 · 125W' },
+      { id: 'pasta-termica', name: 'Pasta Térmica', cat: 'thermal', watts: 0, spec: 'Condutor térmico' },
+      { id: 'pasta-errada', name: 'Super Bonder', cat: 'thermal', invalid: true, watts: 0, spec: 'Inadequado (Cola)' },
+      { id: 'cooler-amd', name: 'Cooler AMD AM4', cat: 'cooler', socket: 'AM4', watts: 10, spec: 'Suporte AM4' },
+      { id: 'cooler-intel', name: 'Cooler LGA1700', cat: 'cooler', socket: 'LGA1700', watts: 10, spec: 'Suporte LGA1700' },
+      { id: 'ram-ddr4', name: 'DDR4 16GB', cat: 'ram', ddr: 'DDR4', watts: 5, spec: 'DDR4 · 3200MHz' },
+      { id: 'ram-ddr5', name: 'DDR5 16GB', cat: 'ram', ddr: 'DDR5', watts: 5, spec: 'DDR5 · 5200MHz' },
+      { id: 'ssd-nvme', name: 'SSD NVMe M.2 1TB', cat: 'storage', iface: 'M2', watts: 5, spec: 'M.2 PCIe' },
+      { id: 'ssd-sata', name: 'SSD SATA 2,5" 480GB', cat: 'storage', iface: 'SATA', watts: 3, spec: 'Baia 2,5" SATA' },
+      { id: 'gpu-3060', name: 'RTX 3060 12GB', cat: 'gpu', watts: 170, spec: 'PCIe x16 · 170W' },
+      { id: 'gpu-1660', name: 'GTX 1660 Super', cat: 'gpu', watts: 120, spec: 'PCIe x16 · 120W' },
+      { id: 'psu-650', name: 'Fonte 650W Bronze', cat: 'psu', maxWatts: 650, watts: 0, spec: 'ATX · 650W' },
+      { id: 'psu-450', name: 'Fonte 450W White', cat: 'psu', maxWatts: 450, watts: 0, spec: 'ATX · 450W' },
+      { id: 'screw-1', name: 'Parafuso M3 #1', cat: 'screw', watts: 0, spec: 'Espaçador M3' },
+      { id: 'screw-2', name: 'Parafuso M3 #2', cat: 'screw', watts: 0, spec: 'Espaçador M3' },
+      { id: 'screw-3', name: 'Parafuso M3 #3', cat: 'screw', watts: 0, spec: 'Espaçador M3' },
+      { id: 'screw-4', name: 'Parafuso M3 #4', cat: 'screw', watts: 0, spec: 'Espaçador M3' }
     ];
 
     let state = {
@@ -417,6 +547,8 @@
       running: false,
       finished: false,
       selectedPartId: null,
+      activeCat: 'all',
+      hideInstalled: true,
       slots: {
         'slot-cpu': null,
         'slot-thermal': null,
@@ -439,6 +571,19 @@
       const isDark = document.documentElement.classList.toggle('dark');
       localStorage.setItem('hardwaredex_theme', isDark ? 'dark' : 'light');
     };
+
+    document.getElementById('hide-installed').onchange = e => {
+      state.hideInstalled = e.target.checked;
+      renderAll();
+    };
+
+    document.querySelectorAll('#cat-pills .cat-pill').forEach(btn => {
+      btn.onclick = () => {
+        state.activeCat = btn.getAttribute('data-cat') || 'all';
+        document.querySelectorAll('#cat-pills .cat-pill').forEach(b => b.classList.toggle('active', b === btn));
+        renderAll();
+      };
+    });
 
     setInterval(() => {
       if (state.running && !state.finished) {
@@ -463,7 +608,7 @@
 
     function removeSlot(slotId) {
       if (slotId === 'slot-cpu' && (state.slots['slot-cooler'] || state.slots['slot-thermal'])) {
-        return showFeedback('Remova primeiro o Cooler e limpe a interface térmica antes de retirar a CPU.');
+        return showFeedback('Remova primeiro o Cooler e limpe a pasta térmica antes de retirar a CPU.');
       }
       if (slotId === 'slot-thermal' && state.slots['slot-cooler']) {
         return showFeedback('Remova primeiro o Cooler antes de limpar a pasta térmica.');
@@ -481,108 +626,119 @@
       if (Object.values(state.slots).includes(part.id)) return showFeedback('Esta peça já está instalada.');
 
       if (part.cat === 'screw') {
-        if (!slotId.startsWith('screw-hole-')) return showFeedback('Parafusos devem ser instalados apenas nos 4 espaçadores nos cantos da placa-mãe.', 10);
-        if (state.slots[slotId]) return showFeedback('Este ponto de fixação já possui um parafuso.', 5);
+        if (!slotId.startsWith('screw-hole-')) return showFeedback('Parafusos vão apenas nos 4 cantos M3 da placa-mãe.', 10);
+        if (state.slots[slotId]) return showFeedback('Este ponto M3 já está ocupado.', 5);
         state.slots[slotId] = part.id;
         state.selectedPartId = null;
         renderAll();
-        return showFeedback(`${part.name} instalado com sucesso.`);
+        return;
       }
 
-      if (slotId.startsWith('screw-hole-')) return showFeedback('Apenas parafusos M3 podem ser instalados nos espaçadores.', 10);
+      if (slotId.startsWith('screw-hole-')) return showFeedback('Apenas parafusos M3 vão nos espaçadores.', 10);
 
       if (part.cat === 'cpu') {
-        if (slotId !== 'slot-cpu') return showFeedback('O processador deve ser instalado no Socket da CPU.', 15);
-        if (state.slots['slot-cpu']) return showFeedback('Socket já ocupado.', 10);
-        if (part.socket !== state.socket) return showFeedback(`Socket incompatível! ${part.name} é ${part.socket}, mas a placa é ${state.socket}.`, 20);
+        if (slotId !== 'slot-cpu') return showFeedback('Instale a CPU no Socket do Processador.', 15);
+        if (state.slots['slot-cpu']) return showFeedback('Socket ocupado.', 10);
+        if (part.socket !== state.socket) return showFeedback(`Incompatível: ${part.name} é ${part.socket}, placa é ${state.socket}.`, 20);
         state.slots['slot-cpu'] = part.id;
         state.selectedPartId = null;
         renderAll();
-        return showFeedback(`${part.name} instalado no socket ${state.socket}.`);
+        return;
       }
 
       if (part.cat === 'thermal') {
-        if (!['slot-thermal', 'slot-cpu', 'slot-cooler'].includes(slotId)) return showFeedback('Aplique a pasta térmica sobre o processador.', 10);
-        if (!state.slots['slot-cpu']) return showFeedback('Instale o processador antes de aplicar a pasta térmica!', 15);
-        if (state.slots['slot-thermal']) return showFeedback('Interface térmica já aplicada.', 5);
+        if (!['slot-thermal', 'slot-cpu', 'slot-cooler'].includes(slotId)) return showFeedback('Aplique sobre o processador.', 10);
+        if (!state.slots['slot-cpu']) return showFeedback('Instale a CPU primeiro!', 15);
+        if (state.slots['slot-thermal']) return showFeedback('Camada térmica já aplicada.', 5);
         state.slots['slot-thermal'] = part.id;
         state.selectedPartId = null;
         renderAll();
-        if (part.invalid) return showFeedback('Super Bonder aplicado! Ele atua como isolante térmico. Clique em Limpar no slot para corrigir com álcool isopropílico.', 30);
-        return showFeedback('Pasta Térmica aplicada corretamente.');
+        if (part.invalid) return showFeedback('Super Bonder é isolante! Clique em Limpar para remover.', 30);
+        return;
       }
 
       if (part.cat === 'cooler') {
-        if (!['slot-cooler', 'slot-thermal', 'slot-cpu'].includes(slotId)) return showFeedback('O Cooler deve ser instalado sobre o processador.', 15);
+        if (!['slot-cooler', 'slot-thermal', 'slot-cpu'].includes(slotId)) return showFeedback('Instale o Cooler sobre o processador.', 15);
         if (!state.slots['slot-cpu']) return showFeedback('Instale a CPU primeiro.', 15);
-        if (!state.slots['slot-thermal']) return showFeedback('Aplique a Pasta Térmica antes de instalar o Cooler!', 15);
-        if (state.slots['slot-thermal'] === 'pasta-errada') return showFeedback('Remova o Super Bonder e aplique Pasta Térmica antes do Cooler!', 15);
+        if (!state.slots['slot-thermal']) return showFeedback('Aplique a Pasta Térmica antes do Cooler!', 15);
+        if (state.slots['slot-thermal'] === 'pasta-errada') return showFeedback('Limpe o Super Bonder antes de instalar o Cooler!', 15);
         if (state.slots['slot-cooler']) return showFeedback('Cooler já instalado.', 10);
         if (part.socket !== state.socket) return showFeedback(`Cooler incompatível com o socket ${state.socket}!`, 20);
         state.slots['slot-cooler'] = part.id;
         state.selectedPartId = null;
         renderAll();
-        return showFeedback(`${part.name} instalado.`);
+        return;
       }
 
       if (part.cat === 'ram') {
-        if (slotId !== 'slot-ram') return showFeedback('Memória RAM deve ser instalada no slot DIMM.', 15);
-        if (state.slots['slot-ram']) return showFeedback('Slot de RAM já ocupado.', 10);
-        if (part.ddr !== state.ddr) return showFeedback(`Memória ${part.ddr} incompatível com os slots ${state.ddr} desta placa-mãe!`, 20);
+        if (slotId !== 'slot-ram') return showFeedback('Instale a RAM no slot DIMM.', 15);
+        if (state.slots['slot-ram']) return showFeedback('Slot de RAM ocupado.', 10);
+        if (part.ddr !== state.ddr) return showFeedback(`Memória ${part.ddr} incompatível com slot ${state.ddr}!`, 20);
         state.slots['slot-ram'] = part.id;
         state.selectedPartId = null;
         renderAll();
-        return showFeedback(`${part.name} instalada.`);
+        return;
       }
 
       if (part.cat === 'storage') {
         if (part.iface === 'M2') {
-          if (slotId !== 'slot-m2') return showFeedback('O SSD NVMe M.2 deve ser instalado no conector M.2 da placa-mãe.', 15);
-          if (state.slots['slot-m2']) return showFeedback('Slot M.2 já ocupado.', 10);
+          if (slotId !== 'slot-m2') return showFeedback('Instale o SSD NVMe no conector M.2 da placa-mãe.', 15);
+          if (state.slots['slot-m2']) return showFeedback('Slot M.2 ocupado.', 10);
           state.slots['slot-m2'] = part.id;
         } else {
-          if (slotId === 'slot-m2') return showFeedback('Um SSD SATA de 2,5" não encaixa no conector M.2! Instale-o na Baia 2,5" do Gabinete.', 25);
-          if (slotId !== 'slot-sata') return showFeedback('O SSD SATA 2,5" deve ser instalado na Baia 2,5" do Gabinete.', 15);
-          if (state.slots['slot-sata']) return showFeedback('Baia 2,5" já ocupada.', 10);
+          if (slotId === 'slot-m2') return showFeedback('SSD SATA 2,5" vai na Baia 2,5" do Gabinete, não no M.2!', 25);
+          if (slotId !== 'slot-sata') return showFeedback('Instale o SSD SATA na Baia 2,5" do Gabinete.', 15);
+          if (state.slots['slot-sata']) return showFeedback('Baia 2,5" ocupada.', 10);
           state.slots['slot-sata'] = part.id;
         }
         state.selectedPartId = null;
         renderAll();
-        return showFeedback(`${part.name} instalado.`);
+        return;
       }
 
       if (part.cat === 'gpu') {
-        if (slotId !== 'slot-gpu') return showFeedback('A Placa de Vídeo deve ser instalada no slot PCIe x16.', 15);
-        if (state.slots['slot-gpu']) return showFeedback('Slot PCIe x16 já ocupado.', 10);
+        if (slotId !== 'slot-gpu') return showFeedback('Instale a Placa de Vídeo no slot PCIe x16.', 15);
+        if (state.slots['slot-gpu']) return showFeedback('Slot PCIe x16 ocupado.', 10);
         state.slots['slot-gpu'] = part.id;
         state.selectedPartId = null;
         renderAll();
-        return showFeedback(`${part.name} instalada.`);
+        return;
       }
 
       if (part.cat === 'psu') {
-        if (slotId !== 'slot-psu') return showFeedback('A Fonte deve ser instalada no Compartimento do Gabinete, não na placa-mãe!', 15);
-        if (state.slots['slot-psu']) return showFeedback('Compartimento da fonte já ocupado.', 10);
+        if (slotId !== 'slot-psu') return showFeedback('Instale a Fonte no Compartimento do Gabinete.', 15);
+        if (state.slots['slot-psu']) return showFeedback('Fonte já instalada.', 10);
         state.slots['slot-psu'] = part.id;
         state.selectedPartId = null;
         renderAll();
-        return showFeedback(`${part.name} instalada no gabinete.`);
+        return;
       }
     }
 
     function renderAll() {
       const installedIds = Object.values(state.slots).filter(Boolean);
       const inv = document.getElementById('inventory-list');
-      inv.innerHTML = PARTS.map(p => {
-        const isInst = installedIds.includes(p.id);
-        const isSel = state.selectedPartId === p.id;
-        return `
-          <div class="part-card ${isInst ? 'installed' : ''} ${isSel ? 'selected' : ''}" draggable="${!isInst}" data-part="${p.id}">
-            <div style="font-size:0.85rem;font-weight:700;">${p.name}</div>
-            <div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--primary);">${p.spec}</div>
-          </div>
-        `;
-      }).join('');
+      const visibleParts = PARTS.filter(p => {
+        if (state.hideInstalled && installedIds.includes(p.id)) return false;
+        if (state.activeCat !== 'all' && p.cat !== state.activeCat) return false;
+        return true;
+      });
+
+      inv.innerHTML = visibleParts.length === 0
+        ? '<div style="padding:1.5rem 0;text-align:center;font-size:0.75rem;color:var(--text-secondary);">Nenhuma peça pendente nesta categoria.</div>'
+        : visibleParts.map(p => {
+            const isInst = installedIds.includes(p.id);
+            const isSel = state.selectedPartId === p.id;
+            return `
+              <div class="part-card ${isInst ? 'installed' : ''} ${isSel ? 'selected' : ''}" draggable="${!isInst}" data-part="${p.id}">
+                <div>
+                  <div style="font-size:0.78rem;font-weight:700;">${p.name}</div>
+                  <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text-secondary);">${p.spec}</div>
+                </div>
+                <span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--primary);">${isInst ? 'Instalado' : 'Selecionar'}</span>
+              </div>
+            `;
+          }).join('');
 
       inv.querySelectorAll('[data-part]').forEach(el => {
         const pid = el.getAttribute('data-part');
@@ -599,13 +755,13 @@
 
       const slotConfigs = [
         { id: 'slot-cpu', box: 'box-cpu', label: `1. Socket CPU (${state.socket})` },
-        { id: 'slot-thermal', box: 'box-thermal', label: '2. Interface Térmica (Pasta Térmica)' },
-        { id: 'slot-cooler', box: 'box-cooler', label: `3. Cooler do Processador (${state.socket})` },
-        { id: 'slot-ram', box: 'box-ram', label: `Slot DIMM de Memória (${state.ddr})` },
-        { id: 'slot-m2', box: 'box-m2', label: 'Conector M.2 NVMe (Na Placa-Mãe)' },
-        { id: 'slot-gpu', box: 'box-gpu', label: 'Barramento PCIe 4.0 x16 (Placa de Vídeo)' },
-        { id: 'slot-sata', box: 'box-sata', label: 'Baia do Gabinete 2,5" (SSD SATA)' },
-        { id: 'slot-psu', box: 'box-psu', label: 'Compartimento Inferior do Gabinete (Fonte PSU)' }
+        { id: 'slot-thermal', box: 'box-thermal', label: '2. Interface Térmica' },
+        { id: 'slot-cooler', box: 'box-cooler', label: `3. Cooler (${state.socket})` },
+        { id: 'slot-ram', box: 'box-ram', label: `Slots DIMM (${state.ddr})` },
+        { id: 'slot-m2', box: 'box-m2', label: 'Slot M.2 PCIe' },
+        { id: 'slot-gpu', box: 'box-gpu', label: 'Slot PCIe x16 (GPU)' },
+        { id: 'slot-sata', box: 'box-sata', label: 'Baia 2,5" do Gabinete' },
+        { id: 'slot-psu', box: 'box-psu', label: 'Compartimento da Fonte (PSU)' }
       ];
 
       slotConfigs.forEach(sc => {
@@ -615,22 +771,22 @@
         el.className = 'slot-box ' + (val === 'pasta-errada' ? 'error-slot' : val ? 'filled' : '');
         el.innerHTML = `
           <div>
-            <div style="font-size:0.7rem;color:#A2AFBE;font-family:var(--font-mono);">${sc.label}</div>
-            <div style="font-size:0.82rem;font-weight:700;">${part ? part.name : 'Vazio — Clique ou solte aqui'}</div>
+            <div style="font-size:0.65rem;color:#A2AFBE;font-family:var(--font-mono);">${sc.label}</div>
+            <div style="font-size:0.76rem;font-weight:700;">${part ? part.name : 'Vazio'}</div>
           </div>
-          ${part ? `<button type="button" class="btn" data-remove="${sc.id}" style="padding:0.2rem 0.5rem;font-size:0.7rem;">${val === 'pasta-errada' ? 'Limpar c/ Álcool' : 'Remover'}</button>` : ''}
+          ${part ? `<button type="button" class="btn" data-remove="${sc.id}" style="padding:0.15rem 0.45rem;font-size:0.65rem;">${val === 'pasta-errada' ? 'Limpar' : '✕'}</button>` : ''}
         `;
       });
 
       let screws = 0;
-      ['screw-hole-1', 'screw-hole-2', 'screw-hole-3', 'screw-hole-4'].forEach(hid => {
+      ['screw-hole-1', 'screw-hole-2', 'screw-hole-3', 'screw-hole-4'].forEach((hid, idx) => {
         const btn = document.querySelector(`[data-slot="${hid}"]`);
         const filled = Boolean(state.slots[hid]);
         if (filled) screws++;
         btn.className = 'screw-btn ' + (filled ? 'filled' : '');
-        btn.textContent = filled ? '●' : '+';
+        btn.textContent = filled ? '●' : String(idx + 1);
       });
-      document.getElementById('screw-counter').textContent = `Fixação: ${screws}/4`;
+      document.getElementById('screw-counter').textContent = `Fixação M3: ${screws}/4`;
 
       document.querySelectorAll('[data-slot]').forEach(el => {
         const sid = el.getAttribute('data-slot');
@@ -659,25 +815,47 @@
       const psu = getPart(state.slots['slot-psu']);
 
       document.getElementById('watts-est').textContent = `${watts} W`;
-      document.getElementById('watts-rec').textContent = `${recWatts} W`;
-      document.getElementById('watts-psu').textContent = psu ? `${psu.maxWatts} W` : 'Não instalada';
+      document.getElementById('watts-rec').textContent = `Rec: ${recWatts} W`;
+      document.getElementById('watts-psu').textContent = psu ? `${psu.maxWatts} W` : '—';
+
+      const checks = [
+        { l: '1. CPU', ok: Boolean(state.slots['slot-cpu']), v: getPart(state.slots['slot-cpu'])?.name || 'Pendente' },
+        { l: '2. Pasta Térmica', ok: state.slots['slot-thermal'] === 'pasta-termica', v: state.slots['slot-thermal'] === 'pasta-errada' ? 'Super Bonder!' : state.slots['slot-thermal'] ? 'OK' : 'Pendente' },
+        { l: '3. Cooler', ok: Boolean(state.slots['slot-cooler']), v: getPart(state.slots['slot-cooler'])?.name || 'Pendente' },
+        { l: '4. RAM', ok: Boolean(state.slots['slot-ram']), v: getPart(state.slots['slot-ram'])?.name || 'Pendente' },
+        { l: '5. SSD', ok: Boolean(state.slots['slot-m2'] || state.slots['slot-sata']), v: getPart(state.slots['slot-m2'])?.name || getPart(state.slots['slot-sata'])?.name || 'Pendente' },
+        { l: '6. GPU', ok: Boolean(state.slots['slot-gpu']), v: getPart(state.slots['slot-gpu'])?.name || 'Pendente' },
+        { l: '7. Fonte PSU', ok: Boolean(psu && psu.maxWatts >= recWatts), v: psu ? `${psu.maxWatts}W` : 'Pendente' },
+        { l: '8. Parafusos M3', ok: screws === 4, v: `${screws}/4` }
+      ];
+
+      const doneCount = checks.filter(c => c.ok).length;
+      document.getElementById('steps-val').textContent = `${doneCount}/8`;
+      document.getElementById('diag-list').innerHTML = checks.map(c => `
+        <div class="status-row">
+          <span style="color:var(--text-secondary);">${c.l}</span>
+          <strong style="font-family:var(--font-mono);color:${c.ok ? 'var(--success)' : 'var(--text-secondary)'};">${c.v}</strong>
+        </div>
+      `).join('');
     }
 
     document.getElementById('plat-am4').onclick = () => {
       state.platform = 'AM4_DDR4'; state.socket = 'AM4'; state.ddr = 'DDR4'; state.baseWatts = 35;
       Object.keys(state.slots).forEach(k => state.slots[k] = null);
-      document.getElementById('stage-title').textContent = 'Chassi ATX — Placa-Mãe AM4 · DDR4';
-      document.getElementById('plat-am4').className = 'btn btn-primary';
-      document.getElementById('plat-lga1700').className = 'btn';
+      document.getElementById('stage-title').textContent = '2. Gabinete ATX — Placa AM4 · DDR4';
+      document.getElementById('pcb-label').textContent = 'PLACA-MÃE (AM4 · DDR4)';
+      document.getElementById('plat-am4').classList.add('active');
+      document.getElementById('plat-lga1700').classList.remove('active');
       renderAll();
     };
 
     document.getElementById('plat-lga1700').onclick = () => {
       state.platform = 'LGA1700_DDR5'; state.socket = 'LGA1700'; state.ddr = 'DDR5'; state.baseWatts = 40;
       Object.keys(state.slots).forEach(k => state.slots[k] = null);
-      document.getElementById('stage-title').textContent = 'Chassi ATX — Placa-Mãe LGA1700 · DDR5';
-      document.getElementById('plat-lga1700').className = 'btn btn-primary';
-      document.getElementById('plat-am4').className = 'btn';
+      document.getElementById('stage-title').textContent = '2. Gabinete ATX — Placa LGA1700 · DDR5';
+      document.getElementById('pcb-label').textContent = 'PLACA-MÃE (LGA1700 · DDR5)';
+      document.getElementById('plat-lga1700').classList.add('active');
+      document.getElementById('plat-am4').classList.remove('active');
       renderAll();
     };
 
@@ -693,17 +871,17 @@
       const missing = [];
       if (!state.slots['slot-cpu']) missing.push('CPU');
       if (!state.slots['slot-thermal']) missing.push('Pasta Térmica');
-      if (state.slots['slot-thermal'] === 'pasta-errada') missing.push('Limpar Super Bonder e aplicar Pasta Térmica');
+      if (state.slots['slot-thermal'] === 'pasta-errada') missing.push('Limpar Super Bonder');
       if (!state.slots['slot-cooler']) missing.push('Cooler');
       if (!state.slots['slot-ram']) missing.push('Memória RAM');
-      if (!state.slots['slot-m2'] && !state.slots['slot-sata']) missing.push('Armazenamento SSD (M.2 ou SATA)');
-      if (!state.slots['slot-gpu']) missing.push('Placa de Vídeo');
-      if (!state.slots['slot-psu']) missing.push('Fonte de Alimentação');
+      if (!state.slots['slot-m2'] && !state.slots['slot-sata']) missing.push('SSD');
+      if (!state.slots['slot-gpu']) missing.push('GPU');
+      if (!state.slots['slot-psu']) missing.push('Fonte');
       const screws = ['screw-hole-1','screw-hole-2','screw-hole-3','screw-hole-4'].filter(k => state.slots[k]).length;
       if (screws < 4) missing.push(`Parafusos (${screws}/4)`);
 
       if (missing.length > 0) {
-        return showFeedback('Diagnóstico POST falhou — Pendências: ' + missing.join(', '), 25);
+        return showFeedback('Falha no POST — Pendências: ' + missing.join(', '), 25);
       }
 
       const installedIds = Object.values(state.slots).filter(Boolean);
@@ -712,7 +890,7 @@
       const psu = getPart(state.slots['slot-psu']);
 
       if (psu.maxWatts < recWatts) {
-        return showFeedback(`Fonte subdimensionada! Consumo estimado: ${watts} W (Margem recomendada: ${recWatts} W). A fonte de ${psu.maxWatts} W não oferece folga segura para esta configuração.`, 25);
+        return showFeedback(`Fonte subdimensionada (${psu.maxWatts}W instalados para ${recWatts}W recomendados). Use a Fonte 650W.`, 25);
       }
 
       if (!state.finished) {
@@ -720,7 +898,7 @@
         state.score += 30;
         document.getElementById('score-val').textContent = state.score;
       }
-      showFeedback(`POST concluído com sucesso! Computador ligado e estável. Pontuação final: ${state.score} pts (+30 bônus).`, 0);
+      showFeedback(`POST concluído com sucesso! Pontuação final: ${state.score} pts (+30 bônus).`, 0);
     };
 
     renderAll();
