@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --success: #10b981;
+      --success-hover: #34d399;
+    }
+
+    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+    
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+      max-width: 800px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    p.intro {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* BOTÃO PARA FERRAMENTA */
+    .btn-ferramenta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 25px;
+      padding: 16px 40px;
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 1px;
+    }
+
+    .btn-ferramenta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-ferramenta:hover::before {
+      left: 100%;
+    }
+
+    .btn-ferramenta:hover {
+      background: linear-gradient(135deg, var(--success-hover), #10b981);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(16, 185, 129, 0.6);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-ferramenta:active {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-ferramenta .icone {
+      font-size: 1.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .btn-ferramenta .texto-botao {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.3;
+    }
+
+    .btn-ferramenta .texto-botao small {
+      font-size: 0.75rem;
+      opacity: 0.9;
+      font-weight: normal;
+      letter-spacing: 0.5px;
+    }
+
+    .grid-pecas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+      border-color: var(--accent);
+    }
+
+    .card-img-container {
+      width: 100%;
+      height: 220px;
+      background-color: var(--card-bg); 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: var(--text-muted); 
+      text-align: center;
+    }
+
+    .card-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+      transition: transform 0.5s, opacity 0.3s;
+    }
+
+    .card:hover .card-img-container img {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+
+    .card-content {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      margin: 0 0 15px 0;
+      color: #fff;
+    }
+
+    .badge-analogia {
+      display: inline-block;
+      background-color: rgba(59, 130, 246, 0.2);
+      color: var(--accent-hover);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .descricao {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .detalhe-tecnico {
+      margin-top: auto; 
+      background-color: rgba(0,0,0,0.2);
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .detalhe-tecnico strong {
+      color: #fff;
+    }
+
+    /* COPYRIGHT */
+    .copyright {
+      text-align: center;
+      padding: 15px 20px;
+      font-size: 0.75rem;
+      color: #546e7a;
+      margin-top: 60px;
+      letter-spacing: 0.5px;
+      width: 100%;
+    }
+
+    .copyright span {
+      color: var(--accent-hover);
+      font-weight: 600;
+    }
+
+    /* Responsivo */
+    @media (max-width: 768px) {
+      .btn-ferramenta {
+        padding: 14px 30px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Hardware wiki</h1>
+    <p class="intro">Antes de ir para a Bancada de Montagem, você precisa conhecer suas ferramentas. Descubra como cada peça funciona comparando-as com coisas do nosso dia a dia.</p>
+    
+    <!-- BOTÃO VISÍVEL PARA FERRAMENTA.HTML -->
+    <a href="ferramenta.html" class="btn-ferramenta">
+      <span class="icone">🔧</span>
+      <span class="texto-botao">
+        Ir para Ferramentas
+        <small>Monte seu PC agora!</small>
+      </span>
+    </a>
+  </header>
+
+  <div class="grid-pecas">
+
+    <!-- PLACA MÃE -->
+    <div class="card">
+      <div class="card-img-container">
+        <img src="placa.jpg" alt="Foto de uma Placa-mãe">
+      </div>
+      <div class="card-content">
+        <h2 class="card-title">Placa-Mãe (Motherboard)</h2>
+        <div class="badge-analogia">O Esqueleto / Sistema Nervoso</div>
+        <p class="descricao">É a maior placa do computador. Sozinha, ela não faz cálculos nem gera imagens, mas é ela quem conecta todas as outras peças. Se o computador fosse uma cidade, a placa-mãe seria o sistema de rodovias ligando todos os prédios.</p>
+        <div class="detalhe-tecnico">
+          <strong>Atenção na montagem:</strong> Verifique sempre o "Soquete". Uma placa-mãe para AMD não aceita processadores Intel.
+        </div>
+      </div>
+    </div>
+
+    <!-- PROCESSADOR -->
+    <div class="card">
+      <div class="card-img-container">
+        <img src="cpu.jpg" alt="Foto de um Processador CPU">
+      </div>
+      <div class="card-content">
+        <h2 class="card-title">Processador (CPU)</h2>
+        <div class="badge-analogia">O Cérebro</div>
+        <p class="descricao">É a peça mais importante. Ele recebe as ordens, faz os cálculos matemáticos complexos e diz para as outras peças o que fazer. Quanto melhor o processador, mais rápido ele pensa.</p>
+        <div class="detalhe-tecnico">
+          <strong>Cuidado:</strong> Ele esquenta muito rápido! Nunca ligue um processador sem um sistema de refrigeração em cima dele.
+        </div>
+      </div>
+    </div>
+
+    <!-- COOLER -->
+    <div class="card">
+      <div class="card-img-container">
+        <img src="cooler.jpg" alt="Foto de um Cooler do Processador">
+      </div>
+      <div class="card-content">
+        <h2 class="card-title">Refrigeração (Cooler)</h2>
+        <div class="badge-analogia">O Ar Condicionado</div>
+        <p class="descricao">O processador trabalha tanto que pode passar dos 90°C em segundos. O Cooler é um dissipador de metal com um ventilador que puxa esse calor para longe da peça, evitando que ela derreta.</p>
+        <div class="detalhe-tecnico">
+          <strong>Pasta Térmica:</strong> O metal do processador e o metal do cooler têm micro-ranhuras. A pasta térmica é um gel cinza que preenche esses buracos, criando a ponte perfeita para o calor passar.
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMÓRIA RAM -->
+    <div class="card">
+      <div class="card-img-container">
+        <img src="ram.jpg" alt="Foto de uma Memória RAM">
+      </div>
+      <div class="card-content">
+        <h2 class="card-title">Memória RAM</h2>
+        <div class="badge-analogia">A Mesa de Trabalho</div>
+        <p class="descricao">Imagine que o HD (armazenamento) é um armário cheio de gavetas, e a RAM é a sua mesa de trabalho. Para trabalhar com um arquivo, o PC tira do armário e coloca na mesa. Se a mesa (RAM) for pequena, você não consegue abrir muitas coisas ao mesmo tempo sem travar.</p>
+        <div class="detalhe-tecnico">
+          <strong>Curiosidade:</strong> Quando o PC é desligado, a mesa é "limpa". A RAM não guarda arquivos para sempre, apenas o que está em uso no momento.
+        </div>
+      </div>
+    </div>
+    
+    <!-- SSD -->
+    <div class="card">
+      <div class="card-img-container">
+        <img src="ssd.jpg" alt="Foto de um SSD M.2">
+      </div>
+      <div class="card-content">
+        <h2 class="card-title">Armazenamento (SSD)</h2>
+        <div class="badge-analogia">O Arquivo Permanente</div>
+        <p class="descricao">É aqui que o Windows, seus jogos, fotos e documentos ficam guardados mesmo quando o computador é desligado pela tomada. Os SSDs modernos (tipo M.2) não possuem peças mecânicas, o que os torna absurdamente rápidos.</p>
+        <div class="detalhe-tecnico">
+          <strong>Velocidade:</strong> Um SSD M.2 (nesse formato de "chiclete") pode ser até 10x mais rápido que um HD tradicional, fazendo o PC ligar em segundos.
+        </div>
+      </div>
+    </div>
+
+    <!-- PLACA DE VÍDEO -->
+    <div class="card">
+      <div class="card-img-container">
+        <img src="video.jpg" alt="Foto de uma Placa de Vídeo">
+      </div>
+      <div class="card-content">
+        <h2 class="card-title">Placa de Vídeo (GPU)</h2>
+        <div class="badge-analogia">O Artista / Pintor</div>
+        <p class="descricao">Enquanto o Processador calcula a física do jogo (onde o personagem está, a velocidade do carro), a Placa de Vídeo recebe esses dados e pinta os pixels na sua tela. Jogos em 3D e edição gráfica pesada exigem um "pintor" muito rápido.</p>
+        <div class="detalhe-tecnico">
+          <strong>Energia:</strong> É a peça que mais consome energia no computador. Exige cabos de força só para ela.
+        </div>
+      </div>
+    </div>
+
+    <!-- FONTE DE ALIMENTAÇÃO -->
+    <div class="card">
+      <div class="card-img-container">
+        <img src="fonte.jpg" alt="Foto de uma Fonte de Alimentação">
+      </div>
+      <div class="card-content">
+        <h2 class="card-title">Fonte de Alimentação (PSU)</h2>
+        <div class="badge-analogia">O Coração</div>
+        <p class="descricao">A energia que vem da tomada da parede é muito forte e instável. A Fonte pega essa energia, "amansa" (converte de Corrente Alternada para Contínua) e bombeia a quantidade exata de energia para cada peça não queimar.</p>
+        <div class="detalhe-tecnico">
+          <strong>Cálculo:</strong> Se o seu PC consome 450 Watts, você precisa de uma fonte que entregue no mínimo 500 Watts para funcionar com segurança.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COPYRIGHT -->
+  <div class="copyright">
+    © 2026 <span>Matheus de Oliveira</span> - Todos os direitos reservados.
+  </div>
+
+</body>
+</html>

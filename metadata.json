@@ -1,0 +1,6 @@
+{
+  "name": "HardwareDex — Plataforma Educacional de Hardware",
+  "description": "Plataforma educacional interativa de hardware com Biblioteca Técnica de Componentes e Bancada Virtual de Montagem e Diagnóstico de Computadores.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

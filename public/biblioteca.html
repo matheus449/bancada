@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HardwareDex — Biblioteca de Hardware</title>
+  <meta name="description" content="Catálogo educacional interativo de componentes de hardware do projeto HardwareDex." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-elevated: #F1F5F9;
+      --primary: #2563EB;
+      --primary-hover: #1D4ED8;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --border: #E2E8F0;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    html.dark {
+      --bg: #0C1118;
+      --surface: #151D28;
+      --surface-elevated: #1C2734;
+      --primary: #3979B7;
+      --primary-hover: #5397D1;
+      --text: #F2F5F8;
+      --text-secondary: #A2AFBE;
+      --border: #2A3542;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.875rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .topbar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .brand {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.25rem 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover { color: var(--text); }
+    .nav-link.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface-elevated);
+      color: var(--text);
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn:hover { border-color: var(--primary); }
+    .btn-primary {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+
+    .container {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    @media (min-width: 1024px) {
+      .hero { grid-template-columns: 7fr 5fr; }
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.5rem, 2.8vw, 2.25rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      text-wrap: balance;
+    }
+
+    .hero p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 65ch;
+      margin-bottom: 1.25rem;
+    }
+
+    .progress-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 0.5rem;
+      background: var(--bg);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0.75rem 0;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      transition: width 0.2s ease;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 260px;
+      max-width: 420px;
+      padding: 0.6rem 0.875rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.875rem;
+      font-family: inherit;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.25rem;
+      padding: 0.25rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      overflow-x: auto;
+    }
+
+    .filter-tab {
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.375rem;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .filter-tab.active {
+      background: var(--surface-elevated);
+      color: var(--text);
+    }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.15s;
+    }
+
+    .card:hover { border-color: var(--primary); }
+
+    .card-media {
+      height: 190px;
+      background: #0F1620;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card-media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .card-media img.loaded { opacity: 1; z-index: 2; }
+
+    .card-body { padding: 1.25rem; }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-summary {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .card-function {
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .card-footer {
+      padding: 0.875rem 1.25rem;
+      background: var(--surface-elevated);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      max-width: 860px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .section-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .info-block {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-size: 0.85rem;
+    }
+
+    .info-block h4 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 1.25rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="biblioteca.html" class="brand">HardwareDex</a>
+      <nav class="nav-links" aria-label="Navegação Principal">
+        <a href="biblioteca.html" class="nav-link active">Biblioteca</a>
+        <a href="ferramenta.html" class="nav-link">Bancada Virtual</a>
+      </nav>
+      <div style="display:flex;gap:0.5rem;align-items:center;">
+        <button type="button" class="btn" id="btn-theme">Alternar Tema</button>
+        <a href="ferramenta.html" class="btn btn-primary">Ir para a Bancada →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="hero-kicker">Ambiente A · Catálogo Técnico Interativo · 7 Componentes Essenciais</div>
+        <h1>Biblioteca de Arquitetura e Componentes de Hardware</h1>
+        <p>Antes de iniciar a montagem na Bancada Virtual, estude como cada peça opera, suas regras de compatibilidade física e elétrica e os erros mais comuns que devem ser evitados.</p>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <a href="ferramenta.html" class="btn btn-primary">Abrir Bancada Virtual</a>
+        </div>
+      </div>
+      <div class="progress-card">
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;font-weight:600;">
+            <span>Progresso de Estudo Local</span>
+            <span id="progress-label" style="font-family:var(--font-mono);color:var(--primary);">0 / 7 estudados</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text-secondary);">Marque os componentes estudados. Seu progresso fica salvo automaticamente neste navegador.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <input type="search" id="search-input" class="search-input" placeholder="Pesquisar componente, socket, DDR4, M.2 ou analogia..." />
+      <div class="filter-tabs" id="filter-tabs"></div>
+    </section>
+
+    <div class="catalog-grid" id="catalog-grid"></div>
+  </main>
+
+  <div class="modal-backdrop" id="detail-modal" role="dialog" aria-modal="true">
+    <div class="modal-box" id="detail-modal-content"></div>
+  </div>
+
+  <footer class="footer">
+    HardwareDex · Plataforma Educacional de Hardware · © 2026 Matheus de Oliveira
+  </footer>
+
+  <script>
+    const COMPONENTS = [
+      {
+        id: 'placa',
+        name: 'Placa-Mãe (Motherboard)',
+        category: 'Estrutura & Conexão',
+        image: 'placa.jpg',
+        analogy: 'O Esqueleto e Sistema Nervoso',
+        summary: 'Circuito impresso central que interconecta fisicamente e eletricamente todos os componentes do computador.',
+        mainFunction: 'Interligar CPU, memória, armazenamento, placa de vídeo e distribuir energia e dados.',
+        whatIs: 'Principal placa de circuito impresso (PCB) onde ficam o socket da CPU, slots de RAM, conectores M.2, PCIe x16 e VRM.',
+        howItWorks: 'Atua como uma malha de comunicação de alta velocidade através de barramentos e do chipset, coordenando sinais entre CPU, RAM, SSD e GPU.',
+        analogyText: 'Se o computador fosse uma cidade planejada, a placa-mãe seria o sistema de rodovias e redes elétricas ligando todos os prédios.',
+        compatibility: 'O socket deve corresponder ao processador (AM4 para Ryzen; LGA1700 para Intel) e os slots DIMM definem se a placa usa DDR4 ou DDR5.',
+        care: 'Fixe a placa sobre os espaçadores do gabinete com os 4 parafusos M3 nos cantos corretos.',
+        mistakes: 'Tentar instalar processador Intel em placa AMD ou comprar memória DDR5 para slots DDR4.',
+        inWorkbench: 'Escolha a plataforma (AM4/DDR4 ou LGA1700/DDR5) no topo da bancada e fixe os 4 parafusos nos cantos.'
+      },
+      {
+        id: 'cpu',
+        name: 'Processador (CPU)',
+        category: 'Processamento',
+        image: 'cpu.jpg',
+        analogy: 'O Cérebro Lógico',
+        summary: 'Unidade Central de Processamento responsável por executar instruções, cálculos lógicos e coordenação do sistema.',
+        mainFunction: 'Processar instruções lógicas, aritméticas e controlar a execução do sistema operacional.',
+        whatIs: 'Chip semicondutor com bilhões de transistores divididos em núcleos de execução rápida.',
+        howItWorks: 'Busca instruções na memória RAM, decodifica e executa cálculos, dissipando calor intenso durante a operação.',
+        analogyText: 'Funciona como o maestro e cérebro lógico que calcula e coordena todas as operações.',
+        compatibility: 'Encaixa exclusivamente no socket correspondente (Ryzen 5 AM4 em socket AM4; Intel i5 LGA1700 em socket LGA1700).',
+        care: 'Nunca ligue o computador sem pasta térmica e um cooler compatível instalados sobre a CPU.',
+        mistakes: 'Forçar um processador em socket incompatível ou esquecer a pasta térmica antes do cooler.',
+        inWorkbench: 'Instale a CPU compatível no socket central antes de aplicar a pasta térmica e o cooler.'
+      },
+      {
+        id: 'cooler',
+        name: 'Refrigeração (Cooler & Pasta Térmica)',
+        category: 'Refrigeração',
+        image: 'cooler.jpg',
+        analogy: 'O Ar Condicionado',
+        summary: 'Conjunto de pasta térmica condutiva e dissipador com ventoinha para manter a CPU em temperatura segura.',
+        mainFunction: 'Transferir o calor do processador para o dissipador metálico e expulsá-lo com fluxo de ar.',
+        whatIs: 'Sistema composto pela interface térmica (pasta térmica) e pelo dissipador aletado com ventoinha PWM.',
+        howItWorks: 'A pasta térmica preenche micro-ranhuras entre o metal da CPU e a base do cooler, permitindo passagem rápida de calor.',
+        analogyText: 'Como o sistema de arrefecimento de um motor, evita que a temperatura passe de 90°C em segundos.',
+        compatibility: 'Exige CPU instalada, pasta térmica aplicada e suporte compatível com o socket da placa-mãe.',
+        care: 'Jamais utilize Super Bonder ou adesivos no lugar da pasta térmica.',
+        mistakes: 'Aplicar cola (Super Bonder) ou tentar instalar cooler AMD em placa Intel.',
+        inWorkbench: 'Aplique a Pasta Térmica sobre a CPU instalada e, em seguida, instale o Cooler compatível.'
+      },
+      {
+        id: 'ram',
+        name: 'Memória RAM',
+        category: 'Memória',
+        image: 'ram.jpg',
+        analogy: 'A Mesa de Trabalho',
+        summary: 'Memória volátil ultrarrápida onde ficam os programas e arquivos abertos em uso imediato.',
+        mainFunction: 'Armazenar temporariamente dados ativos para acesso rápido pela CPU.',
+        whatIs: 'Módulo DIMM de memória volátil que serve de ponte de baixa latência entre o SSD e o processador.',
+        howItWorks: 'Carrega os dados em uso no momento. Quando o PC é desligado, a memória RAM é totalmente esvaziada.',
+        analogyText: 'O SSD é o armário permanente e a RAM é a mesa de trabalho: quanto maior a mesa, mais tarefas cabem abertas ao mesmo tempo.',
+        compatibility: 'Módulos DDR4 só encaixam em placas DDR4; módulos DDR5 só encaixam em placas DDR5.',
+        care: 'Alinhe o chanfro dourado com o slot DIMM antes de pressionar até travar.',
+        mistakes: 'Tentar instalar DDR5 em slot DDR4 ou confundir RAM com armazenamento permanente.',
+        inWorkbench: 'Instale o módulo DDR4 ou DDR5 de acordo com a especificação da placa-mãe ativa.'
+      },
+      {
+        id: 'ssd',
+        name: 'Armazenamento (SSD M.2 & SATA)',
+        category: 'Armazenamento',
+        image: 'ssd.jpg',
+        analogy: 'O Arquivo Permanente',
+        summary: 'Unidade não-volátil onde o sistema operacional, jogos e arquivos ficam guardados permanentemente.',
+        mainFunction: 'Preservar dados e programas mesmo com o computador desligado.',
+        whatIs: 'Dispositivo de armazenamento em memória Flash NAND sem partes mecânicas móveis.',
+        howItWorks: 'Pode ser formato M.2 NVMe (conectado direto na placa-mãe em altíssima velocidade) ou SATA 2,5" (instalado na baia do gabinete com cabos).',
+        analogyText: 'É a biblioteca permanente onde todos os livros continuam guardados mesmo quando a energia é desligada.',
+        compatibility: 'SSD M.2 instala exclusivamente no conector M.2 da placa-mãe; SSD SATA 2,5" instala na baia 2,5" do gabinete.',
+        care: 'Nunca tente forçar um SSD SATA 2,5" dentro de um conector M.2.',
+        mistakes: 'Tentar encaixar um SSD SATA 2,5" no slot M.2.',
+        inWorkbench: 'Instale o SSD NVMe no slot M.2 da placa-mãe ou o SSD SATA 2,5" na baia lateral do gabinete.'
+      },
+      {
+        id: 'video',
+        name: 'Placa de Vídeo (GPU)',
+        category: 'Gráficos',
+        image: 'video.jpg',
+        analogy: 'O Artista / Pintor',
+        summary: 'Processador gráfico dedicado com memória própria (VRAM) para renderizar imagens, vídeos e ambientes 3D.',
+        mainFunction: 'Calcular geometria, iluminação e pixels em paralelo para exibir gráficos na tela.',
+        whatIs: 'Placa de expansão PCI Express x16 equipada com GPU dedicada, memória GDDR e refrigeração própria.',
+        howItWorks: 'Possui milhares de núcleos paralelos que transformam dados matemáticos em quadros visuais na tela.',
+        analogyText: 'Enquanto a CPU calcula a física, a GPU é o artista veloz que pinta milhões de pixels a cada segundo.',
+        compatibility: 'Conecta-se ao slot PCIe x16 e exige alimentação adequada da fonte (120 W na GTX 1660S; 170 W na RTX 3060).',
+        care: 'Verifique se a fonte suporta o consumo somado da GPU e da CPU com margem segura.',
+        mistakes: 'Usar fonte subdimensionada com placa de vídeo de alto consumo.',
+        inWorkbench: 'Instale a RTX 3060 ou GTX 1660 Super no slot PCIe x16 da placa-mãe.'
+      },
+      {
+        id: 'fonte',
+        name: 'Fonte de Alimentação (PSU)',
+        category: 'Energia',
+        image: 'fonte.jpg',
+        analogy: 'O Coração',
+        summary: 'Converte a corrente alternada da tomada em tensões contínuas estabilizadas para todas as peças.',
+        mainFunction: 'Converter AC em DC (+12V, +5V, +3.3V) e alimentar o sistema com margem de segurança.',
+        whatIs: 'Unidade conversora de potência instalada no compartimento inferior do gabinete (PSU Shroud).',
+        howItWorks: 'Estabiliza e distribui energia limpa por cabos para placa-mãe, CPU, placa de vídeo e armazenamento.',
+        analogyText: 'Atua como o coração do sistema, bombeando energia na pressão exata para cada componente.',
+        compatibility: 'A potência nominal deve cobrir o consumo total estimado mais uma margem recomendada (~30%) para picos transitórios.',
+        care: 'A fonte fica no compartimento do gabinete, nunca em cima da placa-mãe.',
+        mistakes: 'Escolher fonte sem margem operacional para configurações de alto consumo (como i5 125W + RTX 3060 170W).',
+        inWorkbench: 'Instale a fonte de 650 W ou 450 W no compartimento inferior do gabinete e confira o diagnóstico elétrico.'
+      }
+    ];
+
+    let studied = JSON.parse(localStorage.getItem('hardwaredex_studied') || '[]');
+    let currentCategory = 'Todas';
+    let searchQuery = '';
+
+    const theme = localStorage.getItem('hardwaredex_theme') || 'dark';
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+
+    document.getElementById('btn-theme').addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('hardwaredex_theme', isDark ? 'dark' : 'light');
+    });
+
+    function updateProgress() {
+      document.getElementById('progress-label').textContent = `${studied.length} / ${COMPONENTS.length} estudados`;
+      document.getElementById('progress-fill').style.width = `${(studied.length / COMPONENTS.length) * 100}%`;
+    }
+
+    function toggleStudied(id) {
+      if (studied.includes(id)) {
+        studied = studied.filter(x => x !== id);
+      } else {
+        studied.push(id);
+      }
+      localStorage.setItem('hardwaredex_studied', JSON.stringify(studied));
+      updateProgress();
+      renderCatalog();
+    }
+
+    function renderFilters() {
+      const cats = ['Todas', ...new Set(COMPONENTS.map(c => c.category))];
+      const container = document.getElementById('filter-tabs');
+      container.innerHTML = cats.map(c => `
+        <button type="button" class="filter-tab ${c === currentCategory ? 'active' : ''}" data-cat="${c}">${c}</button>
+      `).join('');
+      container.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentCategory = btn.getAttribute('data-cat');
+          renderFilters();
+          renderCatalog();
+        });
+      });
+    }
+
+    function openModal(id) {
+      const c = COMPONENTS.find(x => x.id === id);
+      if (!c) return;
+      const modal = document.getElementById('detail-modal');
+      const content = document.getElementById('detail-modal-content');
+      const isStudied = studied.includes(c.id);
+      content.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);">
+          <div>
+            <div style="font-size:0.75rem;color:var(--text-secondary);">${c.category} · Analogia: ${c.analogy}</div>
+            <h2 style="font-size:1.35rem;font-weight:700;">${c.name}</h2>
+          </div>
+          <div style="display:flex;gap:0.5rem;">
+            <button type="button" class="btn" id="modal-study-btn">${isStudied ? '✓ Estudado' : 'Marcar como Estudado'}</button>
+            <button type="button" class="btn" id="modal-close-btn">Fechar</button>
+          </div>
+        </div>
+        <div class="section-grid">
+          <div class="info-block"><h4>01. O que é</h4><p>${c.whatIs}</p></div>
+          <div class="info-block"><h4>02. Como funciona</h4><p>${c.howItWorks}</p></div>
+          <div class="info-block"><h4>03. Analogia (${c.analogy})</h4><p>${c.analogyText}</p></div>
+          <div class="info-block"><h4>04. Função Principal</h4><p>${c.mainFunction}</p></div>
+          <div class="info-block"><h4>05. Compatibilidade</h4><p>${c.compatibility}</p></div>
+          <div class="info-block"><h4>06. Cuidados na Montagem</h4><p>${c.care}</p></div>
+          <div class="info-block"><h4>07. Erros Frequentes</h4><p>${c.mistakes}</p></div>
+          <div class="info-block"><h4>08. Na Bancada Virtual</h4><p>${c.inWorkbench}</p></div>
+        </div>
+        <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;">
+          <a href="ferramenta.html" class="btn btn-primary">Praticar na Bancada Virtual →</a>
+        </div>
+      `;
+      modal.classList.add('open');
+      document.getElementById('modal-close-btn').onclick = () => modal.classList.remove('open');
+      document.getElementById('modal-study-btn').onclick = () => {
+        toggleStudied(c.id);
+        openModal(c.id);
+      };
+    }
+
+    function renderCatalog() {
+      const grid = document.getElementById('catalog-grid');
+      const list = COMPONENTS.filter(c => {
+        const matchCat = currentCategory === 'Todas' || c.category === currentCategory;
+        const q = searchQuery.toLowerCase();
+        const matchQ = !q || c.name.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q) || c.analogy.toLowerCase().includes(q);
+        return matchCat && matchQ;
+      });
+
+      grid.innerHTML = list.map(c => {
+        const isStudied = studied.includes(c.id);
+        return `
+          <article class="card">
+            <div>
+              <div class="card-media">
+                <img src="${c.image}" alt="${c.name}" onload="this.classList.add('loaded')" onerror="this.remove()" />
+                <div style="text-align:center;padding:1rem;color:#64A8E0;font-family:var(--font-mono);font-size:0.8rem;">
+                  [${c.name.toUpperCase()}]<br/><span style="font-size:0.7rem;color:#A2AFBE;">${c.analogy}</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="card-meta">
+                  <span>${c.category} · ${c.analogy}</span>
+                  <button type="button" data-study="${c.id}" style="background:none;border:none;color:${isStudied ? 'var(--success)' : 'var(--primary)'};font-size:0.75rem;font-weight:600;cursor:pointer;">
+                    ${isStudied ? '✓ Estudado' : '○ Marcar estudo'}
+                  </button>
+                </div>
+                <h2 class="card-title">${c.name}</h2>
+                <p class="card-summary">${c.summary}</p>
+                <div class="card-function"><strong>Função:</strong> ${c.mainFunction}</div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn" data-open="${c.id}">Ver Detalhes Técnicos</button>
+              <a href="ferramenta.html" style="font-size:0.75rem;color:var(--text-secondary);text-decoration:none;font-weight:600;">Ir à Bancada →</a>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      grid.querySelectorAll('[data-open]').forEach(btn => {
+        btn.addEventListener('click', () => openModal(btn.getAttribute('data-open')));
+      });
+      grid.querySelectorAll('[data-study]').forEach(btn => {
+        btn.addEventListener('click', () => toggleStudied(btn.getAttribute('data-study')));
+      });
+    }
+
+    document.getElementById('search-input').addEventListener('input', e => {
+      searchQuery = e.target.value;
+      renderCatalog();
+    });
+
+    document.getElementById('detail-modal').addEventListener('click', e => {
+      if (e.target.id === 'detail-modal') e.target.classList.remove('open');
+    });
+
+    updateProgress();
+    renderFilters();
+    renderCatalog();
+  </script>
+</body>
+</html>

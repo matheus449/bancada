@@ -1,0 +1,6 @@
+{
+  "summary":  "Plano completo de arquitetura, design visual e especificacao funcional da plataforma educacional HardwareDex (Biblioteca de Hardware e Bancada Virtual de montagem de PC), incluindo auditoria dos 10 defeitos estruturais originais, regras de compatibilidade multi-plataforma (AM4/DDR4 e LGA1700/DDR5), calculo realista de energia e interacao universal acessivel.",
+  "updatedAt":  "2026-11-08T18:16:33.096357118Z",
+  "requestFeedback":  true,
+  "userFacing":  true
+}
