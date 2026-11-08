@@ -64,7 +64,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 2rem;
+      gap: 1.5rem;
+      flex-wrap: wrap;
     }
 
     .brand {
@@ -195,6 +196,59 @@
       transition: width 0.2s ease;
     }
 
+    .quiz-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      display: none;
+    }
+
+    .quiz-panel.open { display: block; }
+
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .quiz-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .quiz-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1rem;
+    }
+
+    .quiz-opt {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      margin-top: 0.5rem;
+      border-radius: 0.375rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .quiz-opt.correct {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .quiz-opt.wrong {
+      border-color: var(--error);
+      background: rgba(239, 68, 68, 0.12);
+    }
+
     .toolbar {
       display: flex;
       flex-wrap: wrap;
@@ -277,6 +331,7 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      padding: 1rem;
     }
 
     .card-media img {
@@ -399,7 +454,7 @@
       </nav>
       <div style="display:flex;gap:0.5rem;align-items:center;">
         <button type="button" class="btn" id="btn-theme">Alternar Tema</button>
-        <a href="ferramenta.html" class="btn btn-primary">Ir para a Bancada →</a>
+        <a href="ferramenta.html" class="btn btn-primary">Abrir Bancada Virtual</a>
       </div>
     </div>
   </header>
@@ -409,9 +464,10 @@
       <div>
         <div class="hero-kicker">Ambiente A · Catálogo Técnico Interativo · 7 Componentes Essenciais</div>
         <h1>Biblioteca de Arquitetura e Componentes de Hardware</h1>
-        <p>Antes de iniciar a montagem na Bancada Virtual, estude como cada peça opera, suas regras de compatibilidade física e elétrica e os erros mais comuns que devem ser evitados.</p>
+        <p>Compreenda a função física, os critérios de compatibilidade e os cuidados de instalação de cada peça antes de iniciar a montagem prática na Bancada Virtual.</p>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-          <a href="ferramenta.html" class="btn btn-primary">Abrir Bancada Virtual</a>
+          <a href="ferramenta.html" class="btn btn-primary">Ir para Bancada Virtual →</a>
+          <button type="button" class="btn" id="btn-toggle-quiz">Revisar Conceitos (Quiz)</button>
         </div>
       </div>
       <div class="progress-card">
@@ -423,9 +479,20 @@
           <div class="progress-bar-bg">
             <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
           </div>
-          <p style="font-size:0.75rem;color:var(--text-secondary);">Marque os componentes estudados. Seu progresso fica salvo automaticamente neste navegador.</p>
+          <p style="font-size:0.75rem;color:var(--text-secondary);">Explore a ficha técnica de cada componente e marque-o como concluído. Seu progresso permanece salvo automaticamente neste navegador.</p>
         </div>
       </div>
+    </section>
+
+    <section class="quiz-panel" id="quiz-panel" aria-label="Revisão de Conceitos">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">
+        <div>
+          <h2 style="font-size:1.05rem;font-weight:700;">Verificação de Conceitos Técnicos</h2>
+          <p style="font-size:0.75rem;color:var(--text-secondary);">Clique em uma alternativa para validar seu conhecimento e ler a explicação técnica.</p>
+        </div>
+        <button type="button" class="btn" id="btn-close-quiz">Fechar Quiz</button>
+      </div>
+      <div class="quiz-grid" id="quiz-grid"></div>
     </section>
 
     <section class="toolbar">
@@ -444,6 +511,7 @@
     HardwareDex · Plataforma Educacional de Hardware · © 2026 Matheus de Oliveira
   </footer>
 
+  <script src="./hardwaredex-standalone.js"></script>
   <script>
     const COMPONENTS = [
       {
@@ -454,13 +522,14 @@
         analogy: 'O Esqueleto e Sistema Nervoso',
         summary: 'Circuito impresso central que interconecta fisicamente e eletricamente todos os componentes do computador.',
         mainFunction: 'Interligar CPU, memória, armazenamento, placa de vídeo e distribuir energia e dados.',
-        whatIs: 'Principal placa de circuito impresso (PCB) onde ficam o socket da CPU, slots de RAM, conectores M.2, PCIe x16 e VRM.',
-        howItWorks: 'Atua como uma malha de comunicação de alta velocidade através de barramentos e do chipset, coordenando sinais entre CPU, RAM, SSD e GPU.',
-        analogyText: 'Se o computador fosse uma cidade planejada, a placa-mãe seria o sistema de rodovias e redes elétricas ligando todos os prédios.',
-        compatibility: 'O socket deve corresponder ao processador (AM4 para Ryzen; LGA1700 para Intel) e os slots DIMM definem se a placa usa DDR4 ou DDR5.',
-        care: 'Fixe a placa sobre os espaçadores do gabinete com os 4 parafusos M3 nos cantos corretos.',
-        mistakes: 'Tentar instalar processador Intel em placa AMD ou comprar memória DDR5 para slots DDR4.',
-        inWorkbench: 'Escolha a plataforma (AM4/DDR4 ou LGA1700/DDR5) no topo da bancada e fixe os 4 parafusos nos cantos.'
+        whatIs: 'Principal placa de circuito impresso (PCB) onde estão soldados o socket da CPU, slots de RAM, conectores M.2, PCIe x16 e reguladores de tensão (VRM).',
+        howItWorks: 'Atua como uma malha de comunicação de alta velocidade através de trilhas de cobre (barramentos) e do chipset, coordenando sinais entre CPU, RAM, SSD e GPU.',
+        analogyText: 'Se o computador fosse uma cidade planejada, a placa-mãe seria o sistema de rodovias, pontes e redes elétricas interligando todos os edifícios.',
+        compatibility: 'O socket deve corresponder ao processador (AM4 para Ryzen; LGA1700 para Intel). Lembre-se: o socket LGA1700 isoladamente não define se a memória é DDR4 ou DDR5 — isso depende dos slots físicos do modelo da placa-mãe.',
+        care: 'Fixe a placa sobre os espaçadores do gabinete utilizando os 4 parafusos M3 nos furos corretos para evitar curto-circuito.',
+        mistakes: 'Tentar instalar processador Intel em placa AMD, comprar memória DDR5 para slots DDR4 ou esquecer de parafusar a placa.',
+        inWorkbench: 'Escolha a plataforma (AM4/DDR4 ou LGA1700/DDR5) no topo da bancada e fixe os 4 parafusos nos cantos.',
+        related: ['cpu', 'ram', 'ssd', 'fonte']
       },
       {
         id: 'cpu',
@@ -468,15 +537,16 @@
         category: 'Processamento',
         image: 'cpu.jpg',
         analogy: 'O Cérebro Lógico',
-        summary: 'Unidade Central de Processamento responsável por executar instruções, cálculos lógicos e coordenação do sistema.',
-        mainFunction: 'Processar instruções lógicas, aritméticas e controlar a execução do sistema operacional.',
-        whatIs: 'Chip semicondutor com bilhões de transistores divididos em núcleos de execução rápida.',
-        howItWorks: 'Busca instruções na memória RAM, decodifica e executa cálculos, dissipando calor intenso durante a operação.',
-        analogyText: 'Funciona como o maestro e cérebro lógico que calcula e coordena todas as operações.',
-        compatibility: 'Encaixa exclusivamente no socket correspondente (Ryzen 5 AM4 em socket AM4; Intel i5 LGA1700 em socket LGA1700).',
-        care: 'Nunca ligue o computador sem pasta térmica e um cooler compatível instalados sobre a CPU.',
-        mistakes: 'Forçar um processador em socket incompatível ou esquecer a pasta térmica antes do cooler.',
-        inWorkbench: 'Instale a CPU compatível no socket central antes de aplicar a pasta térmica e o cooler.'
+        summary: 'Unidade Central de Processamento responsável por executar instruções de programas, cálculos lógicos e coordenação do sistema.',
+        mainFunction: 'Processar instruções lógicas, aritméticas e controlar a execução do sistema operacional e aplicativos.',
+        whatIs: 'Chip semicondutor contendo bilhões de transistores organizados em núcleos (cores) de execução ultrarrápida.',
+        howItWorks: 'Busca instruções na memória RAM, decodifica o comando e executa cálculos na Unidade Lógica e Aritmética, gerando calor rapidamente pela passagem de corrente.',
+        analogyText: 'O processador funciona como o maestro e cérebro lógico de uma equipe: lê o código, realiza os cálculos e coordena quando cada peça deve agir.',
+        compatibility: 'Encaixa exclusivamente no socket correspondente da placa-mãe (Ryzen 5 AM4 em socket AM4; Intel i5 LGA1700 em socket LGA1700).',
+        care: 'Alinhe o indicador do pino 1 antes de fechar a trava e nunca ligue o computador sem pasta térmica e cooler instalados.',
+        mistakes: 'Tentar instalar CPU em socket incompatível, esquecer a pasta térmica ou tentar remover a CPU sem antes retirar o cooler.',
+        inWorkbench: 'Instale a CPU compatível no socket central antes de aplicar a pasta térmica e o cooler.',
+        related: ['placa', 'cooler', 'ram']
       },
       {
         id: 'cooler',
@@ -484,15 +554,16 @@
         category: 'Refrigeração',
         image: 'cooler.jpg',
         analogy: 'O Ar Condicionado',
-        summary: 'Conjunto de pasta térmica condutiva e dissipador com ventoinha para manter a CPU em temperatura segura.',
-        mainFunction: 'Transferir o calor do processador para o dissipador metálico e expulsá-lo com fluxo de ar.',
-        whatIs: 'Sistema composto pela interface térmica (pasta térmica) e pelo dissipador aletado com ventoinha PWM.',
-        howItWorks: 'A pasta térmica preenche micro-ranhuras entre o metal da CPU e a base do cooler, permitindo passagem rápida de calor.',
-        analogyText: 'Como o sistema de arrefecimento de um motor, evita que a temperatura passe de 90°C em segundos.',
-        compatibility: 'Exige CPU instalada, pasta térmica aplicada e suporte compatível com o socket da placa-mãe.',
-        care: 'Jamais utilize Super Bonder ou adesivos no lugar da pasta térmica.',
-        mistakes: 'Aplicar cola (Super Bonder) ou tentar instalar cooler AMD em placa Intel.',
-        inWorkbench: 'Aplique a Pasta Térmica sobre a CPU instalada e, em seguida, instale o Cooler compatível.'
+        summary: 'Conjunto formado pela interface térmica (pasta térmica) e pelo dissipador com ventoinha responsável por manter a CPU em temperatura segura.',
+        mainFunction: 'Transferir o calor gerado pelo processador para o dissipador metálico e expulsá-lo com fluxo de ar.',
+        whatIs: 'Sistema de arrefecimento que combina pasta térmica condutiva, dissipador aletado em alumínio/cobre e ventoinha PWM.',
+        howItWorks: 'O metal do processador e a base do cooler têm micro-ranhuras invisíveis. A pasta térmica preenche essas microcavidades, permitindo que o calor passe para o dissipador.',
+        analogyText: 'Como o radiador de um motor, evita que a temperatura do processador ultrapasse 90°C em poucos segundos.',
+        compatibility: 'Exige CPU instalada, pasta térmica aplicada e suporte (bracket) compatível com o socket da placa-mãe (AM4 ou LGA1700).',
+        care: 'Jamais utilize colas ou adesivos (como Super Bonder) no lugar da pasta térmica. Se aplicar material incorreto, limpe com álcool isopropílico.',
+        mistakes: 'Esquecer a pasta térmica, aplicar Super Bonder (que age como isolante térmico) ou usar cooler de furação incompatível.',
+        inWorkbench: 'Aplique a Pasta Térmica sobre a CPU instalada e, em seguida, instale o Cooler correspondente ao socket.',
+        related: ['cpu', 'placa']
       },
       {
         id: 'ram',
@@ -500,15 +571,16 @@
         category: 'Memória',
         image: 'ram.jpg',
         analogy: 'A Mesa de Trabalho',
-        summary: 'Memória volátil ultrarrápida onde ficam os programas e arquivos abertos em uso imediato.',
-        mainFunction: 'Armazenar temporariamente dados ativos para acesso rápido pela CPU.',
-        whatIs: 'Módulo DIMM de memória volátil que serve de ponte de baixa latência entre o SSD e o processador.',
-        howItWorks: 'Carrega os dados em uso no momento. Quando o PC é desligado, a memória RAM é totalmente esvaziada.',
-        analogyText: 'O SSD é o armário permanente e a RAM é a mesa de trabalho: quanto maior a mesa, mais tarefas cabem abertas ao mesmo tempo.',
-        compatibility: 'Módulos DDR4 só encaixam em placas DDR4; módulos DDR5 só encaixam em placas DDR5.',
-        care: 'Alinhe o chanfro dourado com o slot DIMM antes de pressionar até travar.',
-        mistakes: 'Tentar instalar DDR5 em slot DDR4 ou confundir RAM com armazenamento permanente.',
-        inWorkbench: 'Instale o módulo DDR4 ou DDR5 de acordo com a especificação da placa-mãe ativa.'
+        summary: 'Memória volátil de altíssima velocidade onde ficam carregados o sistema operacional e os programas abertos no momento.',
+        mainFunction: 'Armazenar temporariamente dados em uso ativo para acesso quase instantâneo pelo processador.',
+        whatIs: 'Módulo DIMM de memória de acesso aleatório e baixa latência que opera diretamente com o controlador de memória da CPU.',
+        howItWorks: 'Copia os arquivos necessários do SSD para acesso rápido enquanto os programas estão abertos. Por ser volátil, é totalmente limpa quando o PC é desligado.',
+        analogyText: 'O SSD é o armário permanente cheio de gavetas, e a RAM é a sua mesa de trabalho: quanto maior a mesa, mais arquivos você mantém abertos sem travar.',
+        compatibility: 'Módulos DDR4 (3200 MHz) e DDR5 (5200 MHz) possuem chanfros físicos e tensões diferentes — cada um só encaixa na placa-mãe do mesmo padrão.',
+        care: 'Alinhe o chanfro dourado do módulo com a divisão interna do slot DIMM antes de pressionar.',
+        mistakes: 'Tentar encaixar DDR5 em placa DDR4 (ou vice-versa) ou confundir RAM com armazenamento permanente.',
+        inWorkbench: 'Verifique se a placa-mãe ativa é DDR4 ou DDR5 e instale o módulo correspondente no slot DIMM.',
+        related: ['placa', 'cpu', 'ssd']
       },
       {
         id: 'ssd',
@@ -516,15 +588,16 @@
         category: 'Armazenamento',
         image: 'ssd.jpg',
         analogy: 'O Arquivo Permanente',
-        summary: 'Unidade não-volátil onde o sistema operacional, jogos e arquivos ficam guardados permanentemente.',
-        mainFunction: 'Preservar dados e programas mesmo com o computador desligado.',
-        whatIs: 'Dispositivo de armazenamento em memória Flash NAND sem partes mecânicas móveis.',
-        howItWorks: 'Pode ser formato M.2 NVMe (conectado direto na placa-mãe em altíssima velocidade) ou SATA 2,5" (instalado na baia do gabinete com cabos).',
-        analogyText: 'É a biblioteca permanente onde todos os livros continuam guardados mesmo quando a energia é desligada.',
-        compatibility: 'SSD M.2 instala exclusivamente no conector M.2 da placa-mãe; SSD SATA 2,5" instala na baia 2,5" do gabinete.',
-        care: 'Nunca tente forçar um SSD SATA 2,5" dentro de um conector M.2.',
-        mistakes: 'Tentar encaixar um SSD SATA 2,5" no slot M.2.',
-        inWorkbench: 'Instale o SSD NVMe no slot M.2 da placa-mãe ou o SSD SATA 2,5" na baia lateral do gabinete.'
+        summary: 'Unidade de estado sólido não-volátil onde o sistema operacional, programas e arquivos pessoais ficam gravados permanentemente.',
+        mainFunction: 'Guardar dados de forma permanente, mantendo as informações mesmo com o computador desligado.',
+        whatIs: 'Dispositivo de armazenamento baseado em memória Flash NAND, sem discos magnéticos ou peças móveis.',
+        howItWorks: 'Existem dois formatos na bancada: o SSD M.2 NVMe (formato compacto que encaixa direto na placa-mãe a 3500 MB/s) e o SSD SATA 2,5" (instalado na baia do gabinete e ligado por cabos a 550 MB/s).',
+        analogyText: 'É a biblioteca permanente onde todos os documentos e jogos permanecem guardados mesmo com o computador fora da tomada.',
+        compatibility: 'SSD M.2 NVMe encaixa exclusivamente no conector M.2 da placa-mãe; SSD SATA 2,5" instala na baia 2,5" do gabinete.',
+        care: 'Nunca tente encaixar um SSD SATA de 2,5 polegadas dentro de um conector M.2.',
+        mistakes: 'Tentar colocar SSD SATA 2,5" no slot M.2 ou tentar ligar o PC sem nenhuma unidade de armazenamento.',
+        inWorkbench: 'Instale o SSD NVMe M.2 no slot M.2 da placa-mãe ou o SSD SATA 2,5" na baia lateral do gabinete.',
+        related: ['placa', 'ram', 'fonte']
       },
       {
         id: 'video',
@@ -532,15 +605,16 @@
         category: 'Gráficos',
         image: 'video.jpg',
         analogy: 'O Artista / Pintor',
-        summary: 'Processador gráfico dedicado com memória própria (VRAM) para renderizar imagens, vídeos e ambientes 3D.',
-        mainFunction: 'Calcular geometria, iluminação e pixels em paralelo para exibir gráficos na tela.',
-        whatIs: 'Placa de expansão PCI Express x16 equipada com GPU dedicada, memória GDDR e refrigeração própria.',
-        howItWorks: 'Possui milhares de núcleos paralelos que transformam dados matemáticos em quadros visuais na tela.',
-        analogyText: 'Enquanto a CPU calcula a física, a GPU é o artista veloz que pinta milhões de pixels a cada segundo.',
-        compatibility: 'Conecta-se ao slot PCIe x16 e exige alimentação adequada da fonte (120 W na GTX 1660S; 170 W na RTX 3060).',
-        care: 'Verifique se a fonte suporta o consumo somado da GPU e da CPU com margem segura.',
-        mistakes: 'Usar fonte subdimensionada com placa de vídeo de alto consumo.',
-        inWorkbench: 'Instale a RTX 3060 ou GTX 1660 Super no slot PCIe x16 da placa-mãe.'
+        summary: 'Processador gráfico dedicado com memória própria (VRAM) projetado para processamento paralelo de imagens, vídeo e 3D.',
+        mainFunction: 'Calcular geometria, iluminação e pixels em paralelo para exibir gráficos na tela com alta taxa de quadros.',
+        whatIs: 'Placa de expansão conectada ao slot PCIe x16 contendo GPU dedicada, memória de vídeo (GDDR6) e sistema de refrigeração próprio.',
+        howItWorks: 'Enquanto a CPU calcula a lógica sequencial, a GPU usa milhares de núcleos paralelos para desenhar os pixels na tela.',
+        analogyText: 'Se o processador calcula a física da cena, a Placa de Vídeo é o artista veloz que pinta cada quadro na tela.',
+        compatibility: 'Conecta-se ao slot PCIe x16 e exige alimentação suplementar da fonte (120 W estimados na GTX 1660 Super; 170 W estimados na RTX 3060).',
+        care: 'Sempre dimensione a fonte considerando a soma da GPU + CPU e a margem para picos transitórios.',
+        mistakes: 'Combinar GPU de alto consumo com fonte subdimensionada ou esquecer de instalá-la em sistemas sem vídeo integrado.',
+        inWorkbench: 'Encaixe a RTX 3060 ou a GTX 1660 Super no slot PCIe x16 da placa-mãe.',
+        related: ['placa', 'fonte', 'cpu']
       },
       {
         id: 'fonte',
@@ -548,21 +622,58 @@
         category: 'Energia',
         image: 'fonte.jpg',
         analogy: 'O Coração',
-        summary: 'Converte a corrente alternada da tomada em tensões contínuas estabilizadas para todas as peças.',
-        mainFunction: 'Converter AC em DC (+12V, +5V, +3.3V) e alimentar o sistema com margem de segurança.',
-        whatIs: 'Unidade conversora de potência instalada no compartimento inferior do gabinete (PSU Shroud).',
-        howItWorks: 'Estabiliza e distribui energia limpa por cabos para placa-mãe, CPU, placa de vídeo e armazenamento.',
-        analogyText: 'Atua como o coração do sistema, bombeando energia na pressão exata para cada componente.',
-        compatibility: 'A potência nominal deve cobrir o consumo total estimado mais uma margem recomendada (~30%) para picos transitórios.',
-        care: 'A fonte fica no compartimento do gabinete, nunca em cima da placa-mãe.',
-        mistakes: 'Escolher fonte sem margem operacional para configurações de alto consumo (como i5 125W + RTX 3060 170W).',
-        inWorkbench: 'Instale a fonte de 650 W ou 450 W no compartimento inferior do gabinete e confira o diagnóstico elétrico.'
+        summary: 'Unidade responsável por converter a corrente alternada da tomada em tensões contínuas reguladas e seguras para todo o computador.',
+        mainFunction: 'Converter AC em DC (+12V, +5V, +3.3V), fornecer potência estável e proteger os componentes contra sobrecargas.',
+        whatIs: 'Conversor de potência ATX alojado no compartimento inferior do gabinete (nunca em cima da placa-mãe).',
+        howItWorks: 'Transforma a tensão alternada da rede elétrica em linhas contínuas estáveis distribuídas por cabos (ATX 24-pin, EPS 8-pin para CPU, PCIe para GPU e SATA).',
+        analogyText: 'Funciona como o coração do computador, bombeando energia limpa e na pressão exata para cada peça não sofrer danos.',
+        compatibility: 'A potência nominal (450 W ou 650 W) deve superar o consumo estimado contínuo somado à margem de segurança recomendada (~30%).',
+        care: 'Diferencie sempre Consumo Estimado, Margem Recomendada e Capacidade Nominal da fonte.',
+        mistakes: 'Achar que a fonte vai presa dentro da placa-mãe ou usar fonte de 450 W sem margem suficiente em configurações de alto consumo (i5 125W + RTX 3060 170W).',
+        inWorkbench: 'Instale a fonte no compartimento inferior do gabinete e confira o balanço energético no painel de diagnóstico.',
+        related: ['placa', 'video', 'cpu']
+      }
+    ];
+
+    const QUESTIONS = [
+      {
+        id: 'q1',
+        q: 'Uma placa-mãe possui o socket Intel LGA1700. O que determina se ela usa memória DDR4 ou DDR5?',
+        opts: [
+          { id: 'a', text: 'Qualquer placa LGA1700 aceita DDR4 e DDR5 no mesmo slot.', ok: false, exp: 'Incorreto. Os slots físicos DDR4 e DDR5 têm chanfros e tensões incompatíveis.' },
+          { id: 'b', text: 'O modelo específico da placa-mãe e o padrão físico dos slots DIMM instalados nela.', ok: true, exp: 'Correto! O socket LGA1700 define o processador, mas o modelo da placa-mãe define se os slots de memória são DDR4 ou DDR5.' }
+        ]
+      },
+      {
+        id: 'q2',
+        q: 'Por que jamais devemos aplicar Super Bonder no lugar da pasta térmica sobre a CPU?',
+        opts: [
+          { id: 'a', text: 'Porque o adesivo age como isolante térmico, impede a troca de calor e cola o cooler ao processador.', ok: true, exp: 'Correto! A pasta térmica conduz calor; colas químicas bloqueiam a dissipação térmica e danificam o conjunto.' },
+          { id: 'b', text: 'Porque ele só funciona em processadores de baixo consumo.', ok: false, exp: 'Incorreto. Adesivos nunca devem ser usados em nenhum processador.' }
+        ]
+      },
+      {
+        id: 'q3',
+        q: 'Onde são instalados um SSD NVMe M.2 e um SSD SATA de 2,5", respectivamente?',
+        opts: [
+          { id: 'a', text: 'O SSD M.2 vai direto no conector M.2 da placa-mãe; o SSD SATA 2,5" vai na baia do gabinete conectado por cabos.', ok: true, exp: 'Correto! São formatos e interfaces diferentes.' },
+          { id: 'b', text: 'Ambos encaixam diretamente no slot M.2 da placa-mãe.', ok: false, exp: 'Incorreto. O SSD SATA 2,5" não encaixa fisicamente em um slot M.2.' }
+        ]
+      },
+      {
+        id: 'q4',
+        q: 'Como avaliar corretamente a escolha da Fonte de Alimentação (PSU)?',
+        opts: [
+          { id: 'a', text: 'Considerar a soma de consumo de todos os componentes mais uma margem segura (~30%) para picos transitórios.', ok: true, exp: 'Correto! Uma fonte bem dimensionada trabalha com folga de segurança e eficiência.' },
+          { id: 'b', text: 'Qualquer fonte que tenha 1 Watt a mais que a soma básica é ideal.', ok: false, exp: 'Incorreto. Operar sem margem de segurança pode causar desligamentos em picos de carga.' }
+        ]
       }
     ];
 
     let studied = JSON.parse(localStorage.getItem('hardwaredex_studied') || '[]');
     let currentCategory = 'Todas';
     let searchQuery = '';
+    let quizAnswers = {};
 
     const theme = localStorage.getItem('hardwaredex_theme') || 'dark';
     document.documentElement.classList.toggle('dark', theme === 'dark');
@@ -571,6 +682,40 @@
       const isDark = document.documentElement.classList.toggle('dark');
       localStorage.setItem('hardwaredex_theme', isDark ? 'dark' : 'light');
     });
+
+    document.getElementById('btn-toggle-quiz').addEventListener('click', () => {
+      document.getElementById('quiz-panel').classList.toggle('open');
+    });
+    document.getElementById('btn-close-quiz').addEventListener('click', () => {
+      document.getElementById('quiz-panel').classList.remove('open');
+    });
+
+    function renderQuiz() {
+      const grid = document.getElementById('quiz-grid');
+      grid.innerHTML = QUESTIONS.map((item, i) => {
+        const chosenId = quizAnswers[item.id];
+        const chosenOpt = item.opts.find(o => o.id === chosenId);
+        return `
+          <div class="quiz-card">
+            <div style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:0.25rem;">Questão 0${i + 1}</div>
+            <div style="font-size:0.85rem;font-weight:700;margin-bottom:0.5rem;">${item.q}</div>
+            ${item.opts.map(o => `
+              <button type="button" class="quiz-opt ${chosenId === o.id ? (o.ok ? 'correct' : 'wrong') : ''}" data-qid="${item.id}" data-oid="${o.id}">
+                <strong>${o.id.toUpperCase()})</strong> ${o.text}
+              </button>
+            `).join('')}
+            ${chosenOpt ? `<div style="margin-top:0.6rem;font-size:0.78rem;color:${chosenOpt.ok ? 'var(--success)' : 'var(--error)'};">${chosenOpt.exp}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+
+      grid.querySelectorAll('[data-qid]').forEach(btn => {
+        btn.onclick = () => {
+          quizAnswers[btn.getAttribute('data-qid')] = btn.getAttribute('data-oid');
+          renderQuiz();
+        };
+      });
+    }
 
     function updateProgress() {
       document.getElementById('progress-label').textContent = `${studied.length} / ${COMPONENTS.length} estudados`;
@@ -609,8 +754,9 @@
       const modal = document.getElementById('detail-modal');
       const content = document.getElementById('detail-modal-content');
       const isStudied = studied.includes(c.id);
+      const svgMap = window.HardwareDexSVG || {};
       content.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);flex-wrap:wrap;">
           <div>
             <div style="font-size:0.75rem;color:var(--text-secondary);">${c.category} · Analogia: ${c.analogy}</div>
             <h2 style="font-size:1.35rem;font-weight:700;">${c.name}</h2>
@@ -624,13 +770,20 @@
           <div class="info-block"><h4>01. O que é</h4><p>${c.whatIs}</p></div>
           <div class="info-block"><h4>02. Como funciona</h4><p>${c.howItWorks}</p></div>
           <div class="info-block"><h4>03. Analogia (${c.analogy})</h4><p>${c.analogyText}</p></div>
-          <div class="info-block"><h4>04. Função Principal</h4><p>${c.mainFunction}</p></div>
+          <div class="info-block"><h4>04. Características & Função</h4><p>${c.mainFunction}</p></div>
           <div class="info-block"><h4>05. Compatibilidade</h4><p>${c.compatibility}</p></div>
           <div class="info-block"><h4>06. Cuidados na Montagem</h4><p>${c.care}</p></div>
           <div class="info-block"><h4>07. Erros Frequentes</h4><p>${c.mistakes}</p></div>
           <div class="info-block"><h4>08. Na Bancada Virtual</h4><p>${c.inWorkbench}</p></div>
         </div>
-        <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;">
+        <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;">
+          <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;">
+            <span style="font-size:0.75rem;color:var(--text-secondary);">Relacionados:</span>
+            ${(c.related || []).map(rid => {
+              const r = COMPONENTS.find(x => x.id === rid);
+              return r ? `<button type="button" class="btn" data-rel="${r.id}" style="padding:0.25rem 0.6rem;font-size:0.72rem;">${r.name.split(' ')[0]}</button>` : '';
+            }).join('')}
+          </div>
           <a href="ferramenta.html" class="btn btn-primary">Praticar na Bancada Virtual →</a>
         </div>
       `;
@@ -640,10 +793,14 @@
         toggleStudied(c.id);
         openModal(c.id);
       };
+      content.querySelectorAll('[data-rel]').forEach(b => {
+        b.onclick = () => openModal(b.getAttribute('data-rel'));
+      });
     }
 
     function renderCatalog() {
       const grid = document.getElementById('catalog-grid');
+      const svgMap = window.HardwareDexSVG || {};
       const list = COMPONENTS.filter(c => {
         const matchCat = currentCategory === 'Todas' || c.category === currentCategory;
         const q = searchQuery.toLowerCase();
@@ -658,9 +815,7 @@
             <div>
               <div class="card-media">
                 <img src="${c.image}" alt="${c.name}" onload="this.classList.add('loaded')" onerror="this.remove()" />
-                <div style="text-align:center;padding:1rem;color:#64A8E0;font-family:var(--font-mono);font-size:0.8rem;">
-                  [${c.name.toUpperCase()}]<br/><span style="font-size:0.7rem;color:#A2AFBE;">${c.analogy}</span>
-                </div>
+                ${svgMap[c.id] || ''}
               </div>
               <div class="card-body">
                 <div class="card-meta">
@@ -675,8 +830,8 @@
               </div>
             </div>
             <div class="card-footer">
-              <button type="button" class="btn" data-open="${c.id}">Ver Detalhes Técnicos</button>
-              <a href="ferramenta.html" style="font-size:0.75rem;color:var(--text-secondary);text-decoration:none;font-weight:600;">Ir à Bancada →</a>
+              <button type="button" class="btn" data-open="${c.id}">Estudar Componente</button>
+              <a href="ferramenta.html" style="font-size:0.75rem;color:var(--text-secondary);text-decoration:none;font-weight:600;">Ver na Bancada →</a>
             </div>
           </article>
         `;
@@ -701,6 +856,7 @@
 
     updateProgress();
     renderFilters();
+    renderQuiz();
     renderCatalog();
   </script>
 </body>

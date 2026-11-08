@@ -343,7 +343,7 @@ export default function App() {
                   </div>
                 </div>
                 <a
-                  href="/biblioteca.html"
+                  href="./biblioteca.html"
                   download="biblioteca.html"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-[#3979B7] hover:bg-[#5397D1] rounded-lg"
                 >
@@ -362,7 +362,7 @@ export default function App() {
                   </div>
                 </div>
                 <a
-                  href="/ferramenta.html"
+                  href="./ferramenta.html"
                   download="ferramenta.html"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-[#3979B7] hover:bg-[#5397D1] rounded-lg"
                 >

@@ -15,7 +15,17 @@
   </head>
   <body class="bg-[#F8FAFC] dark:bg-[#0C1118] text-[#0F172A] dark:text-[#F2F5F8] antialiased selection:bg-[#3979B7]/30">
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="./src/main.tsx" onerror="window.location.replace('./biblioteca.html')"></script>
+    <script>
+      window.addEventListener('load', function () {
+        setTimeout(function () {
+          var root = document.getElementById('root');
+          if (!window.__HARDWAREDEX_VITE_ACTIVE__ && (!root || !root.hasChildNodes())) {
+            window.location.replace('./biblioteca.html');
+          }
+        }, 400);
+      });
+    </script>
   </body>
 </html>
 
