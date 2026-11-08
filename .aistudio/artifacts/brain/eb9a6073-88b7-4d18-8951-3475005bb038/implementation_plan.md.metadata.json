@@ -1,6 +1,6 @@
 {
-  "summary":  "Plano completo de arquitetura, design visual e especificacao funcional da plataforma educacional HardwareDex (Biblioteca de Hardware e Bancada Virtual de montagem de PC), incluindo auditoria dos 10 defeitos estruturais originais, regras de compatibilidade multi-plataforma (AM4/DDR4 e LGA1700/DDR5), calculo realista de energia e interacao universal acessivel.",
-  "updatedAt":  "2026-11-08T18:16:33.096357118Z",
+  "summary":  "Plano de refatoracao e modernizacao profissional completa do HardwareDex, incluindo pesquisa inteligente multi-campo sem acentos, sistema de progresso em duas camadas (Visualizado e Estudado), modulo completo de Quiz com 35 questoes (4 alternativas, 1 questao por vez, feedback imediato e relatorio final), modais acessiveis WCAG 2.2 AA com controle de foco e sincronizacao total entre biblioteca.html, ferramenta.html e preview principal para GitHub Pages.",
+  "updatedAt":  "2026-11-08T18:57:05.397648644Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

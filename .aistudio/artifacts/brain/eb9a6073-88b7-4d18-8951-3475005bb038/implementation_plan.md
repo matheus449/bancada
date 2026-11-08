@@ -1,64 +1,60 @@
-# HardwareDex — Plataforma Educacional de Hardware e Simulador de Montagem
+# HardwareDex — Refatoração e Modernização Profissional Completa
 
-Uma reconstrução integral e profissional da plataforma educacional **HardwareDex**, unificando a **Biblioteca de Hardware** (`biblioteca.html`) e a **Bancada Virtual** (`ferramenta.html`) sob um sistema de design técnico refinado, máquina de estados determinística, suporte completo a múltiplas plataformas de placa-mãe e acessibilidade universal para sala de aula.
+Refatoração estrutural, visual, pedagógica e de acessibilidade (WCAG 2.2 AA) da plataforma **HardwareDex**, elevando a **Biblioteca Técnica** (`biblioteca.html`), a **Bancada Virtual** (`ferramenta.html`) e o motor compartilhado (`hardwaredex-standalone.js`) ao padrão de uma plataforma educacional de engenharia pronta para produção e hospedagem no GitHub Pages.
 
 ### User Review & Critical Decisions
 
 > [!IMPORTANT]
-> Como as perguntas iniciais foram avançadas diretamente, adotamos as recomendações técnicas ideais para garantir máxima fidelidade pedagógica, funcionamento imediato na pré-visualização e compatibilidade total com hospedagem estática ou execução direta no navegador:
+> As decisões abaixo foram confirmadas na etapa de alinhamento e orientam toda a implementação:
 
-- **Entrega Dual (Aplicação Web Integrada + Arquivos HTML Estáticos Executáveis)**: A plataforma funcionará instantaneamente na visualização principal e também disponibilizará os arquivos independentes `biblioteca.html` e `ferramenta.html` prontos para abertura direta (`file://` ou GitHub Pages) e download com um clique.
-- **Imagens Locais com Fallback SVG Técnico de Alta Precisão**: A Biblioteca referencia prioritariamente os arquivos originais (`placa.jpg`, `cpu.jpg`, `cooler.jpg`, `ram.jpg`, `ssd.jpg`, `video.jpg`, `fonte.jpg`) e exibe automaticamente ilustrações vetoriais técnicas detalhadas caso os arquivos locais de imagem não estejam presentes no diretório.
-- **Seleção de Plataforma de Placa-Mãe na Bancada**: O estudante pode alternar entre duas arquiteturas reais de placa-mãe — **Plataforma AMD (Socket AM4 · DDR4)** e **Plataforma Intel (Socket LGA1700 · DDR5)** — permitindo que 100% dos componentes do inventário original sejam testados em cenários válidos e inválidos.
+- **Confirmed Decision 1 — Fluxo do Novo Quiz (35 Questões)**: Apresentação de **uma questão por vez** (4 alternativas plausíveis por questão), onde o estudante seleciona e confirma sua resposta para receber **feedback técnico imediato** com explicação detalhada antes de avançar, encerrando com o painel consolidado de desempenho (acertos, erros, percentual, revisão completa e histórico persistido localmente).
+- **Confirmed Decision 2 — Progresso Educacional em Dois Estados**: Diferenciação entre **Visualizado** (registrado automaticamente quando o estudante abre e lê a ficha técnica) e **Estudado** (declaração ativa do estudante ao concluir o estudo do componente, com opção de desfazer), preservando integralmente a chave `hardwaredex_studied` já existente no `localStorage`.
+- **Confirmed Decision 3 — Sincronização Total (GitHub Pages + Preview Principal)**: Todas as melhorias serão aplicadas de forma sincronizada nos arquivos estáticos (`biblioteca.html`, `ferramenta.html` e `hardwaredex-standalone.js` na raiz e em `public/`) e na visualização principal da aplicação.
 
 ---
 
 ### 1. Overview & Core Concept
 
-- **What It Does**: Ensina estudantes a identificar, compreender, dimensionar, selecionar e instalar componentes internos de um computador pessoal por meio de um ciclo contínuo: **Aprender → Explorar → Selecionar → Montar → Testar → Receber feedback**.
-- **Target Audience / Persona**: Estudantes do ensino fundamental II, médio e técnico, além de professores de informática e tecnologia em laboratório ou sala de aula, sem necessidade de conta, login ou conexão com a internet.
-- **Key Value**: Substitui a memorização passiva e o antigo simulador com regras fixas/defeituosas por um laboratório técnico interativo onde cada decisão (escolha de socket, geração de memória, aplicação de pasta térmica, interface de armazenamento M.2 vs. SATA, fixação da placa-mãe no gabinete e dimensionamento da fonte) produz diagnóstico técnico claro, reversível e educativo.
+- **What It Does**: Guia o estudante pela jornada **Aprender → Compreender → Revisar → Praticar**, conectando fichas técnicas profundas, busca indexada em todos os atributos técnicos, acompanhamento de leitura/estudo, avaliação estruturada de 35 questões e simulação prática na Bancada Virtual.
+- **Target Audience / Persona**: Estudantes e professores de tecnologia, informática e manutenção de computadores em desktop, tablets ou celulares, operando tanto online (GitHub Pages) quanto localmente.
+- **Key Value**: Corrige as limitações anteriores de busca parcial, quiz reduzido e modais sem gerenciamento de foco, entregando um ambiente confiável, acessível por teclado e tecnicamente rigoroso.
 
 ---
 
 ### 2. User Experience & Visual Design
 
 - **Key User Flows**:
-  1. **Exploração na Biblioteca**: O estudante pesquisa ou filtra os 7 componentes fundamentais, acompanha seu progresso de estudo salvo localmente, abre a visualização técnica estruturada em 8 tópicos pedagógicos (*O que é, Como funciona, Analogia, Características, Compatibilidade, Cuidados, Erros frequentes, Na bancada*) e responde ao quiz de verificação conceitual com explicações imediatas para cada alternativa.
-  2. **Preparação na Bancada Virtual**: Ao entrar na bancada, o estudante escolhe a configuração da placa-mãe base (**Kit AMD B550 · Socket AM4 · DDR4** ou **Kit Intel B760 · Socket LGA1700 · DDR5**) e visualiza o chassi técnico 2D com regiões claramente distintas entre gabinete (baia da fonte PSU, baia 2,5" SATA, espaçadores de fixação) e placa-mãe (socket CPU, slots DIMM, slot M.2 PCIe, slot PCIe x16).
-  3. **Instalação Multimodal e Correção**: O estudante instala peças arrastando com o mouse, clicando para selecionar e clicar no slot (mouse/toque), ou navegando via teclado (`Tab` + `Enter`). Se instalar Super Bonder ou quiser trocar a CPU, pode remover componentes respeitando a ordem física de dependências (ex.: remover o cooler antes de remover o processador; limpar superfície com álcool isopropílico educativo após erro de material térmico).
-  4. **Diagnóstico e Inicialização (POST)**: Ao acionar **Ligar Computador**, o sistema valida todas as condições elétricas, térmicas e lógicas. Se houver falhas, exibe um relatório de diagnóstico técnico detalhado; se a montagem estiver íntegra, executa a sequência visual de POST/BIOS e apresenta o relatório final de desempenho com análise pedagógica.
+  1. **Orientação e Acompanhamento de Progresso**: No topo da Biblioteca, o estudante visualiza imediatamente seu progresso separado em componentes **Visualizados** (`0/7`) e **Estudados** (`0/7` com percentual e barra de progresso), além do resumo do último desempenho no Quiz e acesso rápido à avaliação ou à Bancada Virtual.
+  2. **Pesquisa Inteligente Multi-Campo e Filtragem Combinada**: Ao digitar termos como `"DDR4"`, `"LGA1700"`, `"AM4"`, `"M.2"`, `"NVMe"`, `"pasta térmica"` ou `"alimentação"`, o mecanismo normaliza acentos e caixa alta/baixa e consulta simultaneamente nome, categoria, resumo, função, funcionamento, características, compatibilidade, cuidados, erros frequentes e sinônimos técnicos, exibindo a contagem exata de resultados encontrados e filtros ativos.
+  3. **Estudo em Ficha Técnica Acessível**: Ao abrir um componente, o modal bloqueia a rolagem de fundo, move o foco para o cabeçalho da ficha, permite fechar com `Esc` e devolve o foco exatamente ao botão de origem ao fechar. As seções de **Compatibilidade**, **Cuidados na Montagem** e **Erros Frequentes** possuem destaque semântico próprio para facilitar a leitura rápida, e os botões de **Componentes Relacionados** navegam entre fichas reiniciando o scroll interno no topo.
+  4. **Avaliação no Módulo de Quiz (35 Questões)**:
+     - *Tela Inicial do Quiz*: Permite escolher entre **Revisão Geral** (10 questões sorteadas, 15 questões ou todas as 35 questões) ou **Avaliação por Componente Específico** (5 questões dedicadas a qualquer um dos 7 componentes), além de exibir o histórico das tentativas anteriores.
+     - *Execução Passo a Passo*: Exibe 1 questão por vez com barra de progresso, nível de dificuldade/tópico (*Fundamentos, Identificação, Funcionamento, Compatibilidade, Instalação, Diagnóstico, Aplicação Prática*), 4 alternativas acessíveis por teclado e botão **Confirmar Resposta**, revelando a explicação técnica antes de passar à próxima questão.
+     - *Relatório Final*: Apresenta acertos, erros, percentual de aproveitamento, revisão comentada e botão para nova tentativa.
 
 - **Visual Identity & Theme**:
-  - *Aesthetic Direction*: Engenharia de precisão inspirada em instrumentos técnicos, documentação da Linear/Vercel e esquemáticos de hardware — limpa, sóbria, funcional e sem ornamentos artificiais.
+  - *Aesthetic Direction*: Sistema de design técnico de alta precisão inspirado em Apple e Linear, utilizando superfícies sóbrias, bordas sutis de `1px` e ausência total de gradientes exagerados, brilhos neon ou elementos decorativos sem função.
   - *Color Palette & Mood*:
-    - **Modo Escuro (Padrão)**: Background `#0C1118`, Surface `#151D28`, Surface Elevated `#1C2734`, Primary `#3979B7`, Primary Hover `#5397D1`, Text `#F2F5F8`, Secondary Text `#A2AFBE`, Border `#2A3542`, além de tokens semânticos sempre acompanhados de ícone e rótulo textual (`#10B981` Sucesso/Nominal, `#F59E0B` Alerta/Atenção, `#EF4444` Erro/Incompatível).
+    - **Modo Escuro**: Background `#0C1118`, Surface `#151D28`, Surface Elevated `#1C2734`, Primary `#3979B7`, Primary Hover `#5397D1`, Text `#F2F5F8`, Secondary Text `#A2AFBE`, Border `#2A3542`.
     - **Modo Claro**: Background `#F8FAFC`, Surface `#FFFFFF`, Surface Elevated `#F1F5F9`, Primary `#2563EB`, Primary Hover `#1D4ED8`, Text `#0F172A`, Secondary Text `#475569`, Border `#E2E8F0`.
-  - *Typography & Hierarchy*: Títulos e cabeçalhos em `Plus Jakarta Sans` (ou `IBM Plex Sans`), corpo de leitura confortável (65–75 caracteres por linha) e métricas técnicas/consumo elétrico/cronômetro em `IBM Plex Mono` com `tabular-nums`.
-  - *Component Styling & Layout*:
-    - Cabeçalho global em linha única com 3 zonas bem definidas: Identidade `HardwareDex`, navegação entre `Biblioteca` e `Bancada Virtual` com indicador de ambiente ativo, e controles utilitários de tema e consulta rápida.
-    - Bancada em 3 zonas no desktop (Inventário categorizado à esquerda, Chassi + Placa-Mãe SVG interativo ao centro ocupando 60–65% da largura, e Painel de Diagnóstico e Energia à direita) com adaptação responsiva por abas/gavetas em tablets e smartphones.
-    - Metadados técnicos exibidos em texto limpo com separadores tipográficos (`Socket AM4 · 65 W · 6 Núcleos`), sem uso de cápsulas coloridas decorativas.
-
-- **Interactive Feedback & Motion**:
-  - Transições rápidas (`150ms cubic-bezier(0.16, 1, 0.3, 1)`) restritas a `transform` e `opacity`, respeitando `prefers-reduced-motion`.
-  - Realce visual imediato das zonas de encaixe compatíveis ao selecionar um componente no inventário.
+  - *Typography & Hierarchy*: `Plus Jakarta Sans` para títulos e leitura longa (medida de 65–75 caracteres por linha) combinada com `IBM Plex Mono` (`tabular-nums`) para métricas, contadores, tensões, potências e cronômetro.
+  - *Responsive Breakpoints*: Layout testado e fluido para `320px`, `375px`, `390px`, `768px`, `1024px`, `1440px` e `1920px`, sem larguras mínimas rígidas que causem corte ou rolagem horizontal.
 
 ---
 
 ### 3. Key Product Decisions & Trade-Offs
 
-- **Decision 1: Resolução dos 10 Defeitos Estruturais da Auditoria Obrigatória**
-  - *Chosen Approach*: Substituir a verificação baseada em `target.children.length` e manipulação direta do DOM por uma máquina de estados centralizada (`AssemblyEngine`).
-  - *Why*: Na versão original, parafusos podiam ser soltos em qualquer slot vazio e contabilizados, o cooler ignorava validações de ocupação, o SSD SATA 2,5" e memórias DDR5/Intel LGA1700 eram impossíveis de usar, e peças instaladas desapareciam ou ficavam presas sem opção de remoção. Com o estado centralizado, cada slot aceita exclusivamente sua categoria física e valida pré-requisitos antes de mutar o estado.
+- **Decision 1: Base de Dados Centralizada e Compartilhada (`hardwaredex-standalone.js` + Módulo TS)**
+  - *Chosen Approach*: Consolidar os 7 componentes revisados, os índices de sinônimos técnicos e o banco de **35 questões de múltipla escolha (4 alternativas cada, 5 por componente)** tanto no módulo TypeScript quanto no motor Vanilla JS (`hardwaredex-standalone.js`).
+  - *Why*: Garante que qualquer pessoa acessando `biblioteca.html` ou `ferramenta.html` no GitHub Pages tenha exatamente o mesmo banco de 35 questões, a mesma busca inteligente e o mesmo comportamento de acessibilidade da aplicação principal.
 
-- **Decision 2: Modelo Realista de Energia e Dimensionamento de Fonte**
-  - *Chosen Approach*: Calcular o consumo total somando CPU + GPU + RAM + Armazenamento + Cooler + Carga Base da Placa-Mãe/VRM (~35 W), comparando tanto com a capacidade nominal da fonte quanto com a margem de segurança operacional recomendada (folga de ~20% para picos transitórios e eficiência) e conectores PCIe necessários.
-  - *Why*: Ensina ao estudante a diferença entre consumo estimado do sistema, capacidade nominal e margem segura de operação.
+- **Decision 2: Gerenciamento Estrito de Foco e Acessibilidade WCAG 2.2 AA**
+  - *Chosen Approach*: Implementar trap de foco (`Tab` / `Shift+Tab`), fechamento por tecla `Esc`, restauração de foco para o elemento acionador (`lastFocusedElement.focus()`), atributos `aria-modal="true"`, `aria-labelledby` e regiões `aria-live="polite"` para contagem de resultados da busca e feedback do quiz.
+  - *Why*: Atende integralmente aos requisitos de navegação exclusiva por teclado e leitores de tela.
 
-- **Decision 3: Interação Híbrida (Pointer/Click-to-Install + Drag-and-Drop + Teclado)**
-  - *Chosen Approach*: Suportar simultaneamente arrastar e soltar, clicar na peça no inventário e clicar no slot de destino na placa-mãe/gabinete, e operar via teclado.
-  - *Why*: Garante usabilidade perfeita em desktops, notebooks com trackpad, tablets/smartphones em sala de aula e leitores de tela/navegação por teclado.
+- **Decision 3: Preservação e Migração Segura de `localStorage`**
+  - *Chosen Approach*: Ler e validar com `try/catch` e verificação de tipo (`Array.isArray`) as chaves existentes (`hardwaredex_studied`, `hardwaredex_theme`, `hardwaredex_workbench_v2`) e adicionar chaves complementares (`hardwaredex_viewed`, `hardwaredex_quiz_history`) sem jamais sobrescrever ou corromper o progresso anterior do usuário.
+  - *Why*: Protege os dados de estudantes que já utilizam a plataforma e evita que um JSON inválido no navegador trave a renderização.
 
 ---
 
@@ -68,56 +64,47 @@ Uma reconstrução integral e profissional da plataforma educacional **HardwareD
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        Cabeçalho Global HardwareDex                         │
-│   [Marca HardwareDex]     [Biblioteca | Bancada Virtual]     [Tema Claro/Escuro] │
+│                   Cabeçalho Global Responsivo HardwareDex                   │
+│       [HardwareDex]        [Biblioteca | Bancada Virtual]       [Tema]      │
 └───────────────────┬─────────────────────────────────────┬───────────────────┘
                     │                                     │
                     ▼                                     ▼
 ┌───────────────────────────────────────┐ ┌───────────────────────────────────┐
-│     AMBIENTE A: BIBLIOTECA            │ │     AMBIENTE B: BANCADA VIRTUAL   │
+│     AMBIENTE A: BIBLIOTECA TÉCNICA    │ │     AMBIENTE B: BANCADA VIRTUAL   │
 │                                       │ │                                   │
 │ ┌───────────────────────────────────┐ │ │ ┌───────────────────────────────┐ │
-│ │ Barra de Pesquisa + Filtro Categ. │ │ │ │ Seletor de Placa-Mãe          │ │
-│ │ Progresso de Estudo (0/7) + Quiz  │ │ │ │ [AMD AM4/DDR4] [Intel/DDR5]   │ │
+│ │ Painel de Progresso Educacional   │ │ │ │ Seletor de Placa-Mãe          │ │
+│ │ Visualizados (0/7) · Estudados    │ │ │ │ [AM4 · DDR4]  [LGA1700 · DDR5]│ │
 │ └─────────────────┬─────────────────┘ │ │ └───────────────┬───────────────┘ │
 │                   ▼                   │ │                 ▼                 │
 │ ┌───────────────────────────────────┐ │ │ ┌─────────┬───────────┬─────────┐ │
-│ │ Catálogo de Cartões de Hardware   │ │ │ │Inventário│ Chassi &  │Painel de│ │
-│ │ (Imagem real + Fallback SVG)      │ │ │ │Agrupado │ Placa-Mãe │Diagnóst.│ │
-│ └─────────────────┬─────────────────┘ │ │ │por Tipo │ (SVG 2D)  │& Energia│ │
-│                   ▼                   │ │ └────┬────┴─────┬─────┴────┬────┘ │
-│ ┌───────────────────────────────────┐ │ │      │          │          │      │
-│ │ Modal / Painel de Estudo Profundo │ │ │      └──────────┼──────────┘      │
-│ │ 8 Seções + Link Direto p/ Bancada │ │ │                 ▼                 │
-│ └───────────────────────────────────┘ │ │ ┌───────────────────────────────┐ │
-└───────────────────┬───────────────────┘ │ │ Máquina de Estados de Montagem│ │
-                    │                     │ │ Validação · Remoção · POST    │ │
-                    │                     │ └───────────────┬───────────────┘ │
-                    └──────────────────┬──┴─────────────────┘                 │
-                                       ▼                                      │
-                    ┌─────────────────────────────────────┐                   │
-                    │ Persistência Local (LocalStorage)   │                   │
-                    │ Tema · Progresso · Estado Bancada   │                   │
-                    └─────────────────────────────────────┘                   ┘
+│ │ Motor de Busca Multi-Campo +      │ │ │ │Inventário│ Chassi &  │Diagnóst.│ │
+│ │ Normalização de Acentos + Filtros │ │ │ │Categoriz.│ Placa-Mãe │& Energia│ │
+│ └─────────────────┬─────────────────┘ │ │ └─────────┴─────┬─────┴─────────┘ │
+│                   ▼                   │ │                 │                 │
+│ ┌─────────────────┴─────────────────┐ │ │                 ▼                 │
+│ ▼                                   ▼ │ │ ┌───────────────────────────────┐ │
+│ ┌─────────────────┐ ┌───────────────┐ │ │ │ Máquina de Estados + POST     │ │
+│ │ Modal Acessível │ │ Módulo Quiz   │ │ │ └───────────────┬───────────────┘ │
+│ │ Foco + Tecla Esc│ │ 35 Questões   │ │ └─────────────────┼─────────────────┘
+│ │ 8 Seções + Rel. │ │ 1 por vez     │ │                   │
+│ └────────┬────────┘ └───────┬───────┘ │                   │
+└──────────┼──────────────────┼─────────┘                   │
+           └──────────────────┴──────────────┬──────────────┘
+                                             ▼
+                    ┌─────────────────────────────────────┐
+                    │ Camada Segura de Persistência Local │
+                    │ hardwaredex_studied · _viewed       │
+                    │ hardwaredex_quiz_history · _theme   │
+                    └─────────────────────────────────────┘
 ```
 
 - **Data Model & State**:
-  - `HardwareCatalog`: Base de conhecimento estruturada para os 7 componentes (Placa-mãe, Processador, Cooler, Memória RAM, SSD, Placa de vídeo, Fonte de alimentação), contendo especificações, analogias revisadas, guia passo a passo para a bancada e banco de questões de revisão com justificativas técnicas.
-  - `MotherboardProfiles`:
-    - `AM4_DDR4`: Socket `AM4`, padrão `DDR4`, slots M.2 NVMe + portas SATA III, PCIe x16, consumo base da placa `35 W`.
-    - `LGA1700_DDR5`: Socket `LGA1700`, padrão `DDR5`, slots M.2 NVMe + portas SATA III, PCIe x16, consumo base da placa `40 W`.
-  - `WorkbenchState`:
-    - `motherboardId`: plataforma ativa (`AM4_DDR4` | `LGA1700_DDR5`).
-    - `slots`: `{ cpu, thermalCompound, cooler, ram1, m2, sataBay, gpu, psu, screws: [boolean, boolean, boolean, boolean] }`.
-    - `telemetry`: `{ score (inicia em 250), elapsedSeconds, timerActive, finished, powerState ('idle' | 'ready' | 'booting' | 'running' | 'failed'), actionLog[], mistakes[] }`.
+  - `LibraryComponent`: Contém os 7 componentes com todos os campos indexáveis (`name`, `shortName`, `category`, `summary`, `mainFunction`, `whatIs`, `howItWorks`, `analogyTitle`, `analogyText`, `characteristics[]`, `compatibility[]`, `care[]`, `commonMistakes[]`, `inWorkbench`, `searchKeywords[]`, `relatedIds[]`).
+  - `QuizQuestion`: 35 questões distribuídas igualmente (5 por componente: Placa-mãe, Processador, Cooler/Pasta Térmica, Memória RAM, Armazenamento SSD, Placa de Vídeo, Fonte de Alimentação), cada uma com `id`, `componentId`, `difficulty` (`'Fundamentos' | 'Compatibilidade' | 'Instalação & Diagnóstico'`), `question`, `options` (4 alternativas `a`, `b`, `c`, `d`) e explicação técnica detalhada.
+  - `StudyProgressState`: `{ viewedIds: string[], studiedIds: string[], quizHistory: QuizAttemptSummary[] }`.
 
 - **Interactive Component & State Mapping**:
-  - **Validação de Pré-Requisitos e Dependências**:
-    - Instalar `Pasta Térmica` exige `cpu !== null` e `cooler === null`.
-    - Aplicar `Super Bonder` registra o erro técnico, aplica penalidade proporcional e disponibiliza a ação educativa **"Limpar superfície e remover resíduo"** para destravar a montagem sem obrigar o reinício total.
-    - Instalar `Cooler` exige `cpu !== null`, `thermalCompound === 'pasta-termica'` e compatibilidade do suporte (`socket === motherboard.socket`).
-    - Remover `CPU` ou `Pasta Térmica` enquanto o `Cooler` estiver instalado informa que é necessário desinstalar o cooler primeiro.
-    - `SSD NVMe M.2` instala apenas no conector M.2 da placa-mãe; `SSD SATA 2,5"` instala exclusivamente na baia de 2,5" do gabinete com conexão SATA.
-    - `Parafusos` (4 unidades) só podem ser aplicados nos 4 pontos de fixação (`screw-hole-1` a `screw-hole-4`), impedindo reuso do mesmo furo ou aplicação em slots de hardware.
-  - **Consulta Contextual Biblioteca ↔ Bancada**:
-    - Cada componente e alerta de erro na bancada possui um botão de consulta rápida que abre a ficha técnica correspondente da Biblioteca (ou permite navegar entre `biblioteca.html` e `ferramenta.html`) preservando integralmente o estado da montagem no `localStorage`.
+  - **Normalizador de Busca (`normalizeSearchText`)**: Remove diacríticos via `.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()`, permitindo que buscas por `"alimentacao"`, `"alimentação"`, `"m.2"`, `"m2"`, `"am4"`, `"lga1700"`, `"ddr4"`, `"ddr5"`, `"nvme"` ou `"pasta termica"` retornem resultados precisos em tempo real, combinados com o filtro de categoria ativo.
+  - **Ciclo de Vida do Modal de Ficha Técnica**: Ao abrir, armazena `document.activeElement`, adiciona `viewedIds`, bloqueia `document.body.style.overflow = 'hidden'`, foca o botão de fechamento/título do modal e intercepta `Tab` (focus trap) e `Escape`. Ao navegar para um componente relacionado, mantém o modal aberto, registra a visualização do novo componente e reposiciona o scroll do container do modal no topo (`scrollTop = 0`).
+  - **Máquina de Estados do Quiz**: Opera nos estágios `'setup' -> 'active' -> 'summary'`. No estágio `'active'`, o estudante escolhe uma das 4 alternativas e aciona **Confirmar Resposta** para ver a justificativa técnica antes de clicar em **Próxima Questão** (evitando spoilers antecipados das questões seguintes). Ao concluir, grava o resumo no histórico local e exibe o diagnóstico final por área.

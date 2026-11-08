@@ -3,9 +3,27 @@ import { BibliotecaView } from './components/BibliotecaView';
 import { BancadaView } from './components/BancadaView';
 import { LIBRARY_COMPONENTS, WorkbenchPartCategory } from './data/hardwareData';
 import { ComponentIllustration } from './components/HardwareSvg';
-import { X, CheckCircle2, Download } from 'lucide-react';
+import { X, CheckCircle2, Download, Sun, Moon } from 'lucide-react';
 
 type ActiveEnvironment = 'biblioteca' | 'bancada';
+
+const VALID_COMPONENT_IDS = new Set(LIBRARY_COMPONENTS.map((c) => c.id));
+
+function readSafeIdArray(key: string): string[] {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return Array.from(
+      new Set(
+        parsed.filter((item): item is string => typeof item === 'string' && VALID_COMPONENT_IDS.has(item))
+      )
+    );
+  } catch {
+    return [];
+  }
+}
 
 export default function App() {
   const [environment, setEnvironment] = useState<ActiveEnvironment>(() => {
@@ -26,13 +44,14 @@ export default function App() {
     }
   });
 
-  const [studiedIds, setStudiedIds] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('hardwaredex_studied');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
+  const [studiedIds, setStudiedIds] = useState<string[]>(() =>
+    readSafeIdArray('hardwaredex_studied')
+  );
+
+  const [viewedIds, setViewedIds] = useState<string[]>(() => {
+    const viewed = readSafeIdArray('hardwaredex_viewed');
+    const studied = readSafeIdArray('hardwaredex_studied');
+    return Array.from(new Set([...viewed, ...studied]));
   });
 
   const [workbenchFilterCategory, setWorkbenchFilterCategory] =
@@ -62,7 +81,22 @@ export default function App() {
     }
   }, [studiedIds]);
 
+  useEffect(() => {
+    try {
+      localStorage.setItem('hardwaredex_viewed', JSON.stringify(viewedIds));
+    } catch {
+      // Ignore storage error
+    }
+  }, [viewedIds]);
+
+  const handleMarkViewed = useCallback((id: string) => {
+    if (!VALID_COMPONENT_IDS.has(id)) return;
+    setViewedIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
+  }, []);
+
   const handleToggleStudied = useCallback((id: string) => {
+    if (!VALID_COMPONENT_IDS.has(id)) return;
+    setViewedIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
     setStudiedIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
@@ -84,8 +118,8 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-[#F8FAFC] dark:bg-[#0C1118] text-[#0F172A] dark:text-[#F2F5F8] transition-colors duration-150">
       {/* Cabeçalho Global HardwareDex — 3 Zonas */}
       <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#151D28]/95 backdrop-blur-xs border-b border-[#E2E8F0] dark:border-[#2A3542]">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-8">
-          {/* Zona 1: Identidade HardwareDex (1 linha, sem subtítulos ou badges) */}
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-6 sm:gap-8">
+          {/* Zona 1: Identidade HardwareDex */}
           <a
             href="#biblioteca"
             onClick={(e) => {
@@ -97,10 +131,10 @@ export default function App() {
             HardwareDex
           </a>
 
-          {/* Zona 2: Links de navegação concisos em linha única */}
+          {/* Zona 2: Navegação Principal entre Ambientes */}
           <nav
             aria-label="Navegação Principal"
-            className="flex items-center gap-5 sm:gap-7 text-sm font-medium overflow-x-auto"
+            className="flex items-center gap-5 sm:gap-8 text-sm font-medium overflow-x-auto"
           >
             <a
               href="#biblioteca"
@@ -136,14 +170,6 @@ export default function App() {
 
             <button
               type="button"
-              onClick={() => setDarkMode((prev) => !prev)}
-              className="py-1 text-[#475569] dark:text-[#A2AFBE] hover:text-[#0F172A] dark:hover:text-[#F2F5F8] transition-colors cursor-pointer whitespace-nowrap shrink-0"
-            >
-              {darkMode ? 'Tema Claro' : 'Tema Escuro'}
-            </button>
-
-            <button
-              type="button"
               onClick={() => setFilesModalOpen(true)}
               className="hidden sm:inline-block py-1 text-[#475569] dark:text-[#A2AFBE] hover:text-[#0F172A] dark:hover:text-[#F2F5F8] transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
@@ -151,25 +177,26 @@ export default function App() {
             </button>
           </nav>
 
-          {/* Zona 3: 1 Ação Principal */}
+          {/* Zona 3: Controle de Tema Claro/Escuro */}
           <div className="flex items-center shrink-0">
-            {environment === 'biblioteca' ? (
-              <button
-                type="button"
-                onClick={() => setEnvironment('bancada')}
-                className="px-4 py-2 text-xs font-semibold text-white bg-[#3979B7] hover:bg-[#5397D1] rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
-              >
-                Abrir Bancada Virtual
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setEnvironment('biblioteca')}
-                className="px-4 py-2 text-xs font-semibold text-white bg-[#3979B7] hover:bg-[#5397D1] rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
-              >
-                Explorar Biblioteca
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => setDarkMode((prev) => !prev)}
+              aria-label={darkMode ? 'Ativar tema claro' : 'Ativar tema escuro'}
+              className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-[#0F172A] dark:text-[#F2F5F8] bg-[#F1F5F9] dark:bg-[#1C2734] hover:border-[#3979B7] border border-[#E2E8F0] dark:border-[#2A3542] rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            >
+              {darkMode ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-[#5397D1]" />
+                  <span>Tema Claro</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-[#2563EB]" />
+                  <span>Tema Escuro</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
       </header>
@@ -179,19 +206,24 @@ export default function App() {
         {environment === 'biblioteca' ? (
           <BibliotecaView
             studiedIds={studiedIds}
+            viewedIds={viewedIds}
             onToggleStudied={handleToggleStudied}
+            onMarkViewed={handleMarkViewed}
             onNavigateToWorkbench={handleNavigateToWorkbench}
           />
         ) : (
           <BancadaView
-            onOpenLibraryComponent={(compId) => setQuickLibraryComponentId(compId)}
+            onOpenLibraryComponent={(compId) => {
+              handleMarkViewed(compId);
+              setQuickLibraryComponentId(compId);
+            }}
             initialFilterCategory={workbenchFilterCategory}
             onClearInitialFilter={() => setWorkbenchFilterCategory(null)}
           />
         )}
       </main>
 
-      {/* Consulta Contextual Rápida da Biblioteca a partir da Bancada (Preserva o progresso da Bancada) */}
+      {/* Consulta Contextual Rápida da Biblioteca a partir da Bancada */}
       {quickReferenceComponent && (
         <div
           className="fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-4 overflow-y-auto"
@@ -271,8 +303,8 @@ export default function App() {
                 <CheckCircle2 className="w-4 h-4" />
                 <span>
                   {studiedIds.includes(quickReferenceComponent.id)
-                    ? 'Componente já marcado como estudado'
-                    : 'Marcar como estudado'}
+                    ? 'Componente declarado como estudado (Desfazer)'
+                    : 'Declarar como estudado'}
                 </span>
               </button>
 
@@ -317,7 +349,7 @@ export default function App() {
                 id="files-modal-title"
                 className="text-base font-bold text-[#0F172A] dark:text-[#F2F5F8]"
               >
-                Arquivos HTML Estáticos e Instruções de Execução
+                Arquivos HTML Estáticos para GitHub Pages
               </h2>
               <button
                 type="button"
@@ -329,7 +361,7 @@ export default function App() {
             </div>
 
             <p className="text-xs text-[#475569] dark:text-[#A2AFBE] leading-relaxed mb-4">
-              Além da aplicação integrada, os dois arquivos independentes (<code className="font-mono">biblioteca.html</code> e <code className="font-mono">ferramenta.html</code>) estão disponíveis para download ou abertura direta sem servidor de compilação (compatível com GitHub Pages e execução local em sala de aula).
+              Os arquivos independentes (<code className="font-mono">biblioteca.html</code>, <code className="font-mono">ferramenta.html</code> e <code className="font-mono">hardwaredex-standalone.js</code>) encontram-se sincronizados na raiz do repositório para funcionamento imediato no GitHub Pages.
             </p>
 
             <div className="space-y-2.5 mb-5">
@@ -339,7 +371,7 @@ export default function App() {
                     biblioteca.html
                   </div>
                   <div className="text-[11px] text-[#475569] dark:text-[#A2AFBE]">
-                    Catálogo interativo de hardware (HTML5 + CSS3 + ES6)
+                    Biblioteca Técnica + Pesquisa Inteligente + Quiz 35 Questões
                   </div>
                 </div>
                 <a
@@ -358,7 +390,7 @@ export default function App() {
                     ferramenta.html
                   </div>
                   <div className="text-[11px] text-[#475569] dark:text-[#A2AFBE]">
-                    Bancada Virtual de montagem e diagnóstico (HTML5 + CSS3 + ES6)
+                    Bancada Virtual Interativa (AM4/DDR4 e LGA1700/DDR5)
                   </div>
                 </div>
                 <a
